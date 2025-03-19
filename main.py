@@ -34,6 +34,8 @@ from api.notifications import notifications_api  #
 from api.user_profile import user_profile_api
 from api.search import search_api # Nora
 from api.survey import survey_api
+from api.titanic import titanic_api
+
 # database Initialization functions
 from model.carChat import CarChat
 from model.user import User, initUsers
@@ -49,6 +51,7 @@ from model.user_profile import UserProfile, initUserProfile  # Spencer
 from model.skill import Skill  # Nora
 from model.search import SearchHistory # Nora
 from model.survey import Survey, init_surveys  # Soni
+from model.titanic import TitanicModel, initTitanic
 # register URIs for api endpoints
 app.register_blueprint(messages_api) # Adi added this, messages for his website
 app.register_blueprint(user_api)
@@ -69,6 +72,8 @@ app.register_blueprint(user_profile_api) # Spencer
 app.register_blueprint(skill_api) # Nora
 app.register_blueprint(search_api)
 app.register_blueprint(survey_api)
+app.register_blueprint(titanic_api) # register api routes
+
 # Tell Flask-Login the view function name of your login route
 login_manager.login_view = "login"
 @login_manager.unauthorized_handler
@@ -169,6 +174,8 @@ def generate_data():
     Skill.init_skills() # Nora
     SearchHistory.init_search_history() #Nora
     init_surveys()  # Soni
+    initTitanic()
+
 # Backup the old database
 def backup_database(db_uri, backup_uri):
     """Backup the current database."""

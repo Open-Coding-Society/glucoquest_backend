@@ -1,0 +1,102 @@
+{% extends "layouts/base.html" %}
+{% set project = "Admin Dashboard" %}
+
+{% block style %}
+    <style>
+        :root {
+            --primary-color: #ff4d4d; /* Red */
+            --secondary-color: #ffffff; /* White */
+            --accent-color: #4d94ff; /* Blue */
+            --highlight-color: #66cc66; /* Green */
+            --card-background-color: #ffffff; /* White card */
+            --card-text-color: #333333; /* Dark text */
+            --btn-primary-color: #ff4d4d; /* Red button */
+            --btn-primary-hover-color: #e60000; /* Darker red on hover */
+            --btn-secondary-color: #4d94ff; /* Blue button */
+            --btn-secondary-hover-color: #0056b3; /* Darker blue on hover */
+            --gradient-background: linear-gradient(45deg, #8B0000, #660000) !important; /* Dark red gradient */
+        }
+
+        body {
+            background: var(--gradient-background) !important; /* Apply dark red background */
+            color: var(--card-text-color);
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card {
+            background-color: var(--card-background-color);
+            color: var(--card-text-color);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            color: var(--accent-color);
+        }
+
+        .btn-primary {
+            background-color: var(--btn-primary-color);
+            border-color: var(--btn-primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--btn-primary-hover-color);
+            border-color: var(--btn-primary-hover-color);
+        }
+
+        .btn-secondary {
+            background-color: var(--btn-secondary-color);
+            border-color: var(--btn-secondary-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--btn-secondary-hover-color);
+            border-color: var(--btn-secondary-hover-color);
+        }
+
+        h1 {
+            color: var(--secondary-color); /* Change title color to white */
+        }
+
+        .highlight-text {
+            color: var(--highlight-color);
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto" style="height: 100vh;">
+        <h1 class="text-center mb-4" style="color: var(--secondary-color); text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+            <strong>Holiday Admin Dashboard</strong>
+        </h1>
+        
+        <div class="d-flex justify-content-center align-items-center flex-wrap gap-4" style="height: 70vh;">
+            <!-- User Management Card -->
+            <div class="card text-center shadow-sm" style="width: 22rem;">
+                <h5 class="card-title mt-3">User Management</h5>
+                <img class="card-img-top" src="{{ url_for('static', filename='assets/user.png') }}" alt="User Management" height="200">
+                <div class="card-body">
+                    <p class="card-text">Manage users, update roles, and remove inactive accounts.</p>
+                    <a href="https://holiday.stu.nighthawkcodingsociety.com/users/table" class="btn btn-primary">Manage Users</a>
+                </div>
+            </div>
+
+            <!-- Settings Card -->
+            <div class="card text-center shadow-sm" style="width: 22rem;">
+                <h5 class="card-title mt-3">Settings</h5>
+                <img class="card-img-top" src="{{ url_for('static', filename='assets/settings.png') }}" alt="Settings" height="200">
+                <div class="card-body">
+                    <p class="card-text">Configure site settings, API keys, and security options.</p>
+                    <a href="{{ url_for('settings') }}" class="btn btn-secondary">Settings</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

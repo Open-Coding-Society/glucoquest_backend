@@ -92,7 +92,30 @@ class TitanicAPI:
 
             return {'message': 'Data is valid'}, 200
 
+    class _FeatureWeights(Resource):
+        """
+        Endpoint for retrieving feature importance (weights) from the Titanic model.
+        """
+
+        def get(self):
+            """
+            Handle GET requests to retrieve the feature weights.
+            Returns the feature importance of each feature in the model.
+            """
+            try:
+                # Get the singleton instance of TitanicModel
+                titanic_model = TitanicModel.get_instance()
+
+                # Fetch the feature weights
+                feature_weights = titanic_model.feature_weights()
+
+                # Return the feature weights as a JSON response
+                return jsonify(feature_weights)
+            except Exception as e:
+                return {'message': f'Error fetching feature weights: {str(e)}'}, 500
+
 # Register the API resources with the Blueprint
 api.add_resource(TitanicAPI._Predict, '/titanic/predict')
 api.add_resource(TitanicAPI._BulkPredict, '/titanic/bulk-predict')
 api.add_resource(TitanicAPI._DataValidation, '/titanic/validate')
+api.add_resource(TitanicAPI._FeatureWeights, '/titanic/feature-weights')

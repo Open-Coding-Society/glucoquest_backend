@@ -52,6 +52,7 @@ from model.skill import Skill  # Nora
 from model.search import SearchHistory # Nora
 from model.survey import Survey, init_surveys  # Soni
 from model.titanic import TitanicModel, initTitanic
+from model.diabetes import DiabetesModel, initDiabetesModel
 # register URIs for api endpoints
 app.register_blueprint(messages_api) # Adi added this, messages for his website
 app.register_blueprint(user_api)
@@ -175,6 +176,7 @@ def generate_data():
     SearchHistory.init_search_history() #Nora
     init_surveys()  # Soni
     initTitanic()
+    initDiabetesModel()
 
 # Backup the old database
 def backup_database(db_uri, backup_uri):

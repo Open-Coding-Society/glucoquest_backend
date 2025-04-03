@@ -27,7 +27,6 @@ from api.nestPost import nestPost_api # Justin added this, custom format for his
 from api.messages_api import messages_api # Adi added this, messages for his website
 from api.vote import vote_api
 from api.titanic import titanic_api
-from api.foodchoice import food_api
 
 # database Initialization functions
 from model.user import User, initUsers
@@ -53,7 +52,6 @@ app.register_blueprint(nestPost_api)
 app.register_blueprint(nestImg_api)
 app.register_blueprint(vote_api)
 app.register_blueprint(titanic_api) # register api routes
-app.register_blueprint(food_api)
 
 # Tell Flask-Login the view function name of your login route
 login_manager.login_view = "login"

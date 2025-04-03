@@ -67,8 +67,10 @@ class DiabetesModel:
         patient_df = pd.DataFrame(patient_data, index=[0])
         
         # Predict using the trained model
-        prediction = self.model.predict(patient_df)
-        return prediction
+        prediction = self.model.predict(patient_df)  # Ensure it returns an array
+        
+        return int(prediction) if isinstance(prediction, (np.int64, int)) else int(prediction[0])
+
 
 
 def initDiabetesModel():

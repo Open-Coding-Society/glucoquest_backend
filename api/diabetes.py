@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_restful import Api, Resource
-from diabetes import DiabetesModel
-# from api.jwt_authorize import token_required  # Uncomment if you want to add token-based authorization
+from model.diabetes import DiabetesModel
+from api.jwt_authorize import token_required  # Optional, add authentication if needed
 
 # Create a Blueprint for the Diabetes API
 diabetes_api = Blueprint('diabetes_api', __name__, url_prefix='/api')
@@ -10,82 +10,120 @@ diabetes_api = Blueprint('diabetes_api', __name__, url_prefix='/api')
 api = Api(diabetes_api)
 
 class DiabetesAPI:
-    """
-    Define the API endpoints for the Diabetes model.
-    """
-
     class _Predict(Resource):
-        """
-        Diabetes API operation for predicting the likelihood of diabetes.
-        """
-
-        # @token_required()  # Uncomment to add authentication if needed
+        @token_required()  # Optional: add authentication if needed
         def post(self):
             """
-            Handle POST requests to predict the likelihood of diabetes.
-            Expects JSON data containing glucose, BMI, age, insulin, and blood pressure.
+            Handle POST requests to predict the diabetes status of a patient.
+            Expects JSON data containing patient details.
             """
-            data = request.get_json()
+            # Get the patient data from the request
+            patient = request.get_json()
+
+            # Define correct feature names (match the training names)
+            standardized_patient = {
+                'HighBP': patient.get('highbp'),
+                'HighChol': patient.get('highchol'),
+                'CholCheck': patient.get('cholcheck'),
+                'BMI': patient.get('bmi'),
+                'Smoker': patient.get('smoker'),
+                'Stroke': patient.get('stroke'),
+                'HeartDiseaseorAttack': patient.get('heartdiseaseorattack'),
+                'PhysActivity': patient.get('physactivity')
+            }
 
             # Validate the incoming data (ensure it has the required fields)
-            required_keys = ['Glucose', 'BMI', 'Age', 'Insulin', 'BloodPressure']
-            missing_keys = [key for key in required_keys if key not in data]
+            required_keys = ['HighBP', 'HighChol', 'CholCheck', 'BMI', 'Smoker', 'Stroke', 
+                             'HeartDiseaseorAttack', 'PhysActivity']
+            missing_keys = [key for key in required_keys if key not in standardized_patient]
             if missing_keys:
                 return {'message': f'Missing fields: {", ".join(missing_keys)}'}, 400
 
-            # Get the singleton instance of the DiabetesModel
-            model = DiabetesModel.get_instance()
+            # Get the singleton instance of DiabetesModel
+            diabetes_model = DiabetesModel.get_instance()
 
-            # Make prediction
-            prediction = model.predict([data['Glucose'], data['BMI'], data['Age'],
-                                        data['Insulin'], data['BloodPressure']])
+            # Predict the diabetes status of the patient
+            try:
+                response = diabetes_model.predict(standardized_patient)
+                return jsonify({'prediction': response})
+            except Exception as e:
+                return {'message': f'Error processing prediction: {str(e)}'}, 500
 
-            return jsonify({'prediction': prediction})
-
-    class _Probability(Resource):
+    class _BulkPredict(Resource):
         """
-        Diabetes API operation for getting the probability of diabetes.
+        Bulk operation for predicting diabetes status for multiple patients.
         """
 
-        # @token_required()  # Uncomment to add authentication if needed
+        @token_required()  # Optional: add authentication if needed
         def post(self):
             """
-            Handle POST requests to get the probability of diabetes.
-            Expects JSON data containing glucose, BMI, age, insulin, and blood pressure.
+            Handle POST requests for bulk predictions.
+            Expects a JSON list of patient data.
             """
-            data = request.get_json()
+            patients = request.get_json()
 
-            # Validate the incoming data (ensure it has the required fields)
-            required_keys = ['Glucose', 'BMI', 'Age', 'Insulin', 'BloodPressure']
-            missing_keys = [key for key in required_keys if key not in data]
+            if not isinstance(patients, list):
+                return {'message': 'Expected a list of patient data'}, 400
+
+            predictions = []
+            for patient in patients:
+                try:
+                    response = DiabetesModel.get_instance().predict(patient)
+                    predictions.append({'prediction': response[0]})
+                except Exception as e:
+                    predictions.append({'error': f'Error processing patient: {str(e)}'})
+
+            return jsonify(predictions)
+
+    class _DataValidation(Resource):
+        """
+        Endpoint for validating patient data schema.
+        """
+
+        def post(self):
+            """
+            Validate incoming patient data.
+            Checks for required fields and correct types.
+            """
+            patient = request.get_json()
+
+            required_keys = ['highbp', 'highchol', 'cholcheck', 'bmi', 'smoker', 'stroke', 
+                             'heartdiseaseorattack', 'physactivity']
+            missing_keys = [key for key in required_keys if key not in patient]
             if missing_keys:
                 return {'message': f'Missing fields: {", ".join(missing_keys)}'}, 400
 
-            # Get the singleton instance of the DiabetesModel
-            model = DiabetesModel.get_instance()
+            # Additional checks can be added here for data type validation, e.g., numeric checks for 'bmi'
+            if not isinstance(patient['bmi'], (int, float)):
+                return {'message': 'Invalid data type for BMI'}, 400
 
-            # Get the prediction probabilities
-            probability = model.predict_proba([data['Glucose'], data['BMI'], data['Age'],
-                                               data['Insulin'], data['BloodPressure']])
+            return {'message': 'Data is valid'}, 200
 
-            return jsonify({'probability': {'no_diabetes': probability[0], 'diabetes': probability[1]}})
-
-    class _FeatureImportance(Resource):
+    class _FeatureWeights(Resource):
         """
-        Diabetes API operation for retrieving feature importance.
+        Endpoint for retrieving feature importance (weights) from the Diabetes model.
         """
 
-        # @token_required()  # Uncomment to add authentication if needed
         def get(self):
             """
-            Handle GET requests to retrieve the feature importance.
+            Handle GET requests to retrieve the feature weights.
+            Returns the feature importance of each feature in the model.
             """
-            model = DiabetesModel.get_instance()
-            feature_importance = model.feature_importance()
+            try:
+                # Get the singleton instance of DiabetesModel
+                diabetes_model = DiabetesModel.get_instance()
 
-            return jsonify({'feature_importance': feature_importance})
+                # Fetch the feature weights (optional, if you have this functionality in your model)
+                # Example: If you have a method in the model to retrieve feature weights, you can use it here
+                feature_weights = diabetes_model.feature_weights()
+
+                # Return the feature weights as a JSON response
+                return jsonify(feature_weights)
+            except Exception as e:
+                return {'message': f'Error fetching feature weights: {str(e)}'}, 500
 
 # Register the API resources with the Blueprint
 api.add_resource(DiabetesAPI._Predict, '/diabetes/predict')
-api.add_resource(DiabetesAPI._Probability, '/diabetes/probability')
-api.add_resource(DiabetesAPI._FeatureImportance, '/diabetes/feature-importance')
+api.add_resource(DiabetesAPI._BulkPredict, '/diabetes/bulk-predict')
+api.add_resource(DiabetesAPI._DataValidation, '/diabetes/validate')
+api.add_resource(DiabetesAPI._FeatureWeights, '/diabetes/feature-weights')

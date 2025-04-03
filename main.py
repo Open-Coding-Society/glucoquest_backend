@@ -25,19 +25,11 @@ from api.group import group_api
 from api.section import section_api
 from api.nestPost import nestPost_api # Justin added this, custom format for his website
 from api.messages_api import messages_api # Adi added this, messages for his website
-from api.carphoto import car_api
-from api.carChat import car_chat_api
 from api.vote import vote_api
-from api.events import event_api  # Import the event API
-from api.skill import skill_api  # Nora api 4 Table!
-from api.notifications import notifications_api  #
-from api.user_profile import user_profile_api
-from api.search import search_api # Nora
-from api.survey import survey_api
 from api.titanic import titanic_api
+from api.foodchoice import food_api
 
 # database Initialization functions
-from model.carChat import CarChat
 from model.user import User, initUsers
 from model.section import Section, initSections
 from model.group import Group, initGroups
@@ -45,14 +37,9 @@ from model.channel import Channel, initChannels
 from model.post import Post, initPosts
 from model.nestPost import NestPost, initNestPosts # Justin added this, custom format for his website
 from model.vote import Vote, initVotes
-from model.events import Event, initEvents  # Vibha
-from model.notifications import Notification # Kushi
-from model.user_profile import UserProfile, initUserProfile  # Spencer
-from model.skill import Skill  # Nora
-from model.search import SearchHistory # Nora
-from model.survey import Survey, init_surveys  # Soni
 from model.titanic import TitanicModel, initTitanic
 from model.diabetes import DiabetesModel, initDiabetesModel
+from model.foodchoice import Food, initFoods
 # register URIs for api endpoints
 app.register_blueprint(messages_api) # Adi added this, messages for his website
 app.register_blueprint(user_api)
@@ -61,19 +48,12 @@ app.register_blueprint(post_api)
 app.register_blueprint(channel_api)
 app.register_blueprint(group_api)
 app.register_blueprint(section_api)
-app.register_blueprint(car_chat_api)
 # Added new files to create nestPosts, uses a different format than Mortensen and didn't want to touch his junk
 app.register_blueprint(nestPost_api)
 app.register_blueprint(nestImg_api)
 app.register_blueprint(vote_api)
-app.register_blueprint(car_api)
-app.register_blueprint(event_api) # Vibha
-app.register_blueprint(notifications_api)  # Kushi
-app.register_blueprint(user_profile_api) # Spencer
-app.register_blueprint(skill_api) # Nora
-app.register_blueprint(search_api)
-app.register_blueprint(survey_api)
 app.register_blueprint(titanic_api) # register api routes
+app.register_blueprint(food_api)
 
 # Tell Flask-Login the view function name of your login route
 login_manager.login_view = "login"
@@ -169,14 +149,9 @@ def generate_data():
     initPosts()
     initNestPosts()
     initVotes()
-    initEvents()  # Vibha
-    Notification.init_notifications()  # Kushi
-    initUserProfile() # Spencer
-    Skill.init_skills() # Nora
-    SearchHistory.init_search_history() #Nora
-    init_surveys()  # Soni
     initTitanic()
     initDiabetesModel()
+    initFoods()
 
 # Backup the old database
 def backup_database(db_uri, backup_uri):
@@ -197,6 +172,7 @@ def extract_data():
         data['groups'] = [group.read() for group in Group.query.all()]
         data['channels'] = [channel.read() for channel in Channel.query.all()]
         data['posts'] = [post.read() for post in Post.query.all()]
+        data['food'] = [food.read() for food in Food.query.all()]
     return data
 # Save extracted data to JSON files
 def save_data_to_json(data, directory='backup'):

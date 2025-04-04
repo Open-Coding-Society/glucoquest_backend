@@ -114,4 +114,27 @@ class GlucoseAPI(Resource):
             return "High"
         return "Normal"
 
+@glucose_api.route('/', methods=['GET'])
+def get_record():
+    try:
+        # Query all suggested books
+        records = GlucoseRecord.query.all()
+
+        # Convert the list of book objects to a list of dictionaries
+        record_data = [
+            {
+                'id': record.id,
+                'value': record.value,
+                'time': record.time,
+                'notes': record.notes,
+                'status': record.status,
+                'created_at': record.created_at
+            }
+            for record in records
+        ]
+
+        return jsonify(record_data), 200
+    except Exception as e:
+        return jsonify({'error': 'Failed to fetch records', 'message': str(e)}), 500
+
 api.add_resource(GlucoseAPI, '/glucose')

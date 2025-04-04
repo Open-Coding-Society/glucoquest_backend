@@ -3,7 +3,7 @@ import logging
 from datetime import datetime
 
 class GlucoseRecord(db.Model):
-    __tablename__ = 'glucose_records'
+    __tablename__ = 'glucose'
     
     id = db.Column(db.Integer, primary_key=True)
     value = db.Column(db.Float, nullable=False)  # 血糖值 (mmol/L)

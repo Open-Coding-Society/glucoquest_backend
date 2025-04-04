@@ -118,7 +118,7 @@ class GlucoseRecord(db.Model):
             logging.warning(f"Error restoring glucose records: {str(e)}")
             return False
 
-def initGlucoseRecords():
+def initGlucose():
     """初始化血糖记录表并添加示例数据"""
     try:
         db.create_all()

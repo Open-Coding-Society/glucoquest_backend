@@ -15,6 +15,7 @@ from flask import Flask
 # import "objects" from "this" project
 from __init__ import app, db, login_manager  # Key Flask objects
 CORS(app, supports_credentials=True)
+
 # API endpoints
 from api.user import user_api
 from api.pfp import pfp_api
@@ -28,6 +29,7 @@ from api.messages_api import messages_api # Adi added this, messages for his web
 from api.vote import vote_api
 from api.titanic import titanic_api
 from api.diabetes import diabetes_api
+from api.foodchoice import food_api
 
 # database Initialization functions
 from model.user import User, initUsers
@@ -40,6 +42,7 @@ from model.vote import Vote, initVotes
 from model.titanic import TitanicModel, initTitanic
 from model.diabetes import DiabetesModel, initDiabetesModel
 from model.foodchoice import Food, initFoods
+
 # register URIs for api endpoints
 app.register_blueprint(messages_api) # Adi added this, messages for his website
 app.register_blueprint(user_api)
@@ -52,8 +55,10 @@ app.register_blueprint(section_api)
 app.register_blueprint(nestPost_api)
 app.register_blueprint(nestImg_api)
 app.register_blueprint(vote_api)
-app.register_blueprint(titanic_api) # register api routes
-app.register_blueprint(diabetes_api) # register api routes
+app.register_blueprint(titanic_api) 
+app.register_blueprint(diabetes_api)
+app.register_blueprint(food_api)
+
 # Tell Flask-Login the view function name of your login route
 login_manager.login_view = "login"
 @login_manager.unauthorized_handler

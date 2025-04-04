@@ -119,7 +119,7 @@ class Food(db.Model):
             "number": 1,
             "food": "",
             "glycemic_index": 1,
-            "image": "",
+            "image": "{{site.baseurl}}/",
         },
  '''
 
@@ -129,49 +129,49 @@ def initFoods():
             "number": 1,
             "food": "Apple",
             "glycemic_index": 41,
-            "image": "https://pngimg.com/uploads/apple/apple_PNG12497.png",
+            "image": "apple.png",
         },
         {
             "number": 1,
             "food": "Banana",
             "glycemic_index": 62,
-            "image": "https://pngimg.com/d/banana_PNG842.png",
+            "image": "banana.png",
         },
         {
             "number": 2,
             "food": "Waffles",
             "glycemic_index": 77,
-            "image": "https://static.vecteezy.com/system/resources/previews/047/826/765/non_2x/waffle-against-transparent-background-free-png.png",
+            "image": "waffle.png",
         },
         {
             "number": 2,
             "food": "Oatmeal",
             "glycemic_index": 53,
-            "image": "https://pngimg.com/d/porridge_PNG42.png",
+            "image": "oatmeal.png",
         },
         {
             "number": 3,
             "food": "Yogurt",
             "glycemic_index": 32,
-            "image": "https://static.vecteezy.com/system/resources/previews/047/490/650/non_2x/greek-yogurt-tub-with-spoon-isolated-on-transparent-background-free-png.png",
+            "image": "yogurt.png",
         },
         {
             "number": 3,
             "food": "Popcorn",
             "glycemic_index": 62,
-            "image": "https://pngimg.com/d/popcorn_PNG26.png",
+            "image": "popcorn.png",
         },
         {
             "number": 4,
             "food": "Steamed white rice",
             "glycemic_index": 70,
-            "image": "https://static.vecteezy.com/system/resources/previews/009/887/170/non_2x/white-rice-in-bow-free-png.png",
+            "image": "whiterice.png",
         },
         {
             "number": 4,
             "food": "Salmon",
             "glycemic_index": 0,
-            "image": "https://png.pngtree.com/png-vector/20240125/ourmid/pngtree-sliced-raw-salmon-fillet-png-file-png-image_11490817.png",
+            "image": "salmon.png",
         },
     ]       
     

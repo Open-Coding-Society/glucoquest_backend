@@ -30,6 +30,7 @@ from api.vote import vote_api
 from api.titanic import titanic_api
 from api.diabetes import diabetes_api
 from api.foodchoice import food_api
+from api.glucose import glucose_api
 
 # database Initialization functions
 from model.user import User, initUsers
@@ -42,6 +43,7 @@ from model.vote import Vote, initVotes
 from model.titanic import TitanicModel, initTitanic
 from model.diabetes import DiabetesModel, initDiabetesModel
 from model.foodchoice import Food, initFoods
+from model.glucose import GlucoseRecord, initGlucose
 
 # register URIs for api endpoints
 app.register_blueprint(messages_api) # Adi added this, messages for his website
@@ -58,6 +60,7 @@ app.register_blueprint(vote_api)
 app.register_blueprint(titanic_api) 
 app.register_blueprint(diabetes_api)
 app.register_blueprint(food_api)
+app.register_blueprint(glucose_api)
 
 # Tell Flask-Login the view function name of your login route
 login_manager.login_view = "login"
@@ -156,6 +159,7 @@ def generate_data():
     initTitanic()
     initDiabetesModel()
     initFoods()
+    initGlucose()
 
 # Backup the old database
 def backup_database(db_uri, backup_uri):
@@ -177,6 +181,7 @@ def extract_data():
         data['channels'] = [channel.read() for channel in Channel.query.all()]
         data['posts'] = [post.read() for post in Post.query.all()]
         data['food'] = [food.read() for food in Food.query.all()]
+        data['glucose'] = [glucose.read() for glucose in GlucoseRecord.query.all()]
     return data
 # Save extracted data to JSON files
 def save_data_to_json(data, directory='backup'):
@@ -201,6 +206,7 @@ def restore_data(data):
         _ = Group.restore(data['groups'], users)
         _ = Channel.restore(data['channels'])
         _ = Post.restore(data['posts'])
+        _ = GlucoseRecord.restore(data['glucose'])
 
     print("Data restored to the new database.")
 # Define a command to backup data

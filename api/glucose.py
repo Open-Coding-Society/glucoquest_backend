@@ -3,7 +3,8 @@ from flask_restful import Api, Resource
 from model.glucose import db, GlucoseRecord
 from datetime import datetime
 
-glucose_api = Blueprint('glucose_api', __name__, url_prefix='/api')
+# Define Blueprint and Api
+glucose_api = Blueprint('glucose_api', __name__, url_prefix='/api/glucose')
 api = Api(glucose_api)
 
 class GlucoseAPI(Resource):

@@ -116,29 +116,40 @@ class DiabetesAPI:
     class _DataValidation(Resource):
         def post(self):
             """
-            Validate patient data structure and types.
+            Validate incoming patient data with proper type checking
             """
             patient = request.get_json()
-
+            
             # Required fields
-            required_keys = ['highbp', 'highchol', 'cholcheck', 'bmi']
-            missing_keys = [key for key in required_keys if key not in patient]
-            if missing_keys:
-                return {'message': f'Missing required fields: {", ".join(missing_keys)}'}, 400
-
-            # Type validation
-            type_checks = [
-                ('highbp', bool, int),
-                ('highchol', bool, int),
-                ('cholcheck', bool, int),
-                ('bmi', (int, float)),
-                # Add checks for other fields if they're required
-            ]
-
-            for field, *types in type_checks:
-                if field in patient and not isinstance(patient[field], types):
-                    return {'message': f'Invalid type for {field}. Expected {types}'}, 400
-
+            required_fields = {
+                'highbp': (int,),  # Should be 0 or 1
+                'highchol': (int,),
+                'cholcheck': (int,),
+                'bmi': (int, float)
+            }
+            
+            # Check required fields
+            missing_fields = [field for field in required_fields if field not in patient]
+            if missing_fields:
+                return {'message': f'Missing required fields: {", ".join(missing_fields)}'}, 400
+            
+            # Validate field types
+            type_errors = []
+            for field, expected_types in required_fields.items():
+                if not isinstance(patient[field], expected_types):
+                    type_errors.append(
+                        f"Field '{field}' should be {expected_types}, got {type(patient[field])}"
+                    )
+            
+            if type_errors:
+                return {'message': 'Type errors: ' + '; '.join(type_errors)}, 400
+            
+            # Additional validation for BMI range
+            if 'bmi' in patient:
+                bmi = patient['bmi']
+                if bmi < 10 or bmi > 60:
+                    return {'message': 'BMI must be between 10 and 60'}, 400
+            
             return {'message': 'Data is valid'}, 200
 
     class _FeatureWeights(Resource):

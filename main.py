@@ -32,6 +32,7 @@ from api.diabetes import diabetes_api
 from api.foodchoice import food_api
 from api.glucose import glucose_api
 from api.crossword import crossword_api
+from api.prediction import prediction_api 
 
 # database Initialization functions
 from model.user import User, initUsers
@@ -64,7 +65,7 @@ app.register_blueprint(titanic_api)
 app.register_blueprint(diabetes_api)
 app.register_blueprint(food_api)
 app.register_blueprint(glucose_api)
-
+app.register_blueprint(prediction_api)
 # Tell Flask-Login the view function name of your login route
 login_manager.login_view = "login"
 @login_manager.unauthorized_handler
@@ -163,6 +164,7 @@ def generate_data():
     initDiabetesModel()
     initFoods()
     initGlucose()
+    initPredictions()
 
 # Backup the old database
 def backup_database(db_uri, backup_uri):

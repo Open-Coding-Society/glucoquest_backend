@@ -31,6 +31,7 @@ from api.titanic import titanic_api
 from api.diabetes import diabetes_api
 from api.foodchoice import food_api
 from api.glucose import glucose_api
+from api.crossword import crossword_api
 
 # database Initialization functions
 from model.user import User, initUsers
@@ -54,6 +55,7 @@ app.register_blueprint(post_api)
 app.register_blueprint(channel_api)
 app.register_blueprint(group_api)
 app.register_blueprint(section_api)
+app.register_blueprint(crossword_api)
 # Added new files to create nestPosts, uses a different format than Mortensen and didn't want to touch his junk
 app.register_blueprint(nestPost_api)
 app.register_blueprint(nestImg_api)

@@ -1,13 +1,6 @@
-from flask import Flask, request, jsonify, render_template
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, request, jsonify, render_template, Blueprint
 from datetime import datetime
-
-app = Flask(__name__)
-
-# Database setup (SQLite)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///crossword_feedback.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+from __init__ import app, db
 
 # Feedback Model
 class Feedback(db.Model):
@@ -32,13 +25,12 @@ class Feedback(db.Model):
 with app.app_context():
     db.create_all()
 
-# Serve the HTML frontend
-@app.route('/')
-def index():
-    return render_template('crossword.html')
 
 # API Endpoints
-@app.route('/api/feedback', methods=['POST'])
+# filepath: /home/qixiang/nighthawk/dexcom_backend/api/crossword.py
+crossword_api = Blueprint('crossword_api', __name__)
+
+@crossword_api.route('/api/feedback', methods=['POST'])
 def submit_feedback():
     data = request.get_json()
     if not data or 'accuracy' not in data or not data.get('comment', '').strip():
@@ -49,10 +41,11 @@ def submit_feedback():
     db.session.commit()
     return jsonify(feedback.to_dict()), 201
 
-@app.route('/api/feedback', methods=['GET'])
+@crossword_api.route('/api/feedback', methods=['GET'])
 def get_feedback():
     feedbacks = Feedback.query.order_by(Feedback.timestamp.desc()).all()
     return jsonify([f.to_dict() for f in feedbacks])
 
-if __name__ == '__main__':
-    app.run(debug=True)
+@crossword_api.route('/')
+def index():
+    return render_template('crossword.html')

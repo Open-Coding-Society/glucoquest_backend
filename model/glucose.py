@@ -6,39 +6,49 @@ class GlucoseRecord(db.Model):
     __tablename__ = 'glucose_records'
     
     id = db.Column(db.Integer, primary_key=True)
-    value = db.Column(db.Float, nullable=False)  # 血糖值 (mmol/L)
-    time = db.Column(db.DateTime, nullable=False)  # 测量时间
-    notes = db.Column(db.String(500))  # 备注
-    status = db.Column(db.String(10), nullable=False)  # 状态: Low/Normal/High
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)  # 记录创建时间
+    value = db.Column(db.Float, nullable=False)
+    time = db.Column(db.DateTime, nullable=False)
+    notes = db.Column(db.String(500))
+    status = db.Column(db.String(10), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
-    def __init__(self, value, time, notes=None):
+    def __init__(self, value, time, notes=None, _skip_status=False):
         """
         初始化血糖记录
         :param value: 血糖值 (mmol/L)
-        :param time: 测量时间 (datetime或ISO格式字符串)
-        :param notes: 备注信息 (可选)
+        :param time: 测量时间
+        :param notes: 备注信息
+        :param _skip_status: 内部使用，跳过自动状态计算
         """
         self.value = float(value)
         self.time = time if isinstance(time, datetime) else datetime.fromisoformat(time)
         self.notes = notes or ""
-        self.status = self._get_status(self.value)
+        
+        # 只有当不跳过时才自动计算状态
+        if not _skip_status:
+            self.status = self._calculate_status(self.value)
+
+    @staticmethod
+    def _calculate_status(value):
+        """内部状态计算方法"""
+        value = float(value)
+        if value < 4: return "Low"
+        if value > 7.8: return "High"
+        return "Normal"
 
     def create(self):
-        """创建新的血糖记录"""
+        """创建记录方法（可选保留）"""
         try:
-            # 验证血糖值范围
             if self.value < 1 or self.value > 30:
-                raise ValueError("Glucose value must be between 1 and 30 mmol/L")
+                raise ValueError("血糖值必须在1-30 mmol/L之间")
                 
             db.session.add(self)
             db.session.commit()
             return self
         except Exception as e:
             db.session.rollback()
-            logging.warning(f"Error creating glucose record: {str(e)}")
-            return None
-
+            raise e  # 抛出异常由上层处理
+        
     def delete(self):
         """删除血糖记录"""
         try:

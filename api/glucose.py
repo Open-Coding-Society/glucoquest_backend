@@ -51,15 +51,16 @@ def create_record():
             return jsonify({"error": "Glucose value must be between 1 and 30 mmol/L"}), 400
 
         # 确定血糖状态
-        status = get_glucose_status(value)
+        status = "Low" if value < 4 else "High" if value > 7.8 else "Normal"
 
-        # 创建新记录
+        # 创建新记录 - 现在使用正确的初始化方式
         new_record = GlucoseRecord(
             value=value,
-            time=datetime.fromisoformat(data['time']),
-            notes=data.get('notes', '').strip(),
-            status=status
+            time=data['time'],  # 让模型处理时间转换
+            notes=data.get('notes', '').strip()
         )
+        # 确保状态被正确设置
+        new_record.status = status
 
         db.session.add(new_record)
         db.session.commit()
@@ -78,7 +79,7 @@ def create_record():
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
-
+    
 @glucose_api.route('/<int:record_id>', methods=['PUT'])
 def update_record(record_id):
     """更新血糖记录"""

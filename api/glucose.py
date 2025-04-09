@@ -9,7 +9,6 @@ api = Api(glucose_api)
 
 @glucose_api.route('/', methods=['GET'])
 def get_records():
-    """获取所有血糖记录"""
     try:
         # Query all glucose records ordered by time (newest first)
         records = GlucoseRecord.query.order_by(GlucoseRecord.time.desc()).all()
@@ -33,33 +32,28 @@ def get_records():
 
 @glucose_api.route('/', methods=['POST'])
 def create_record():
-    """创建新的血糖记录"""
     try:
         data = request.get_json()
         if not data:
             return jsonify({"error": "Invalid input: No JSON data provided"}), 400
 
-        # 验证必填字段
         required_fields = ['value', 'time']
         for field in required_fields:
             if field not in data:
                 return jsonify({"error": f"Missing required field: {field}"}), 400
 
-        # 验证血糖值范围
         value = float(data['value'])
         if value < 1 or value > 30:
             return jsonify({"error": "Glucose value must be between 1 and 30 mmol/L"}), 400
 
-        # 确定血糖状态
         status = "Low" if value < 4 else "High" if value > 7.8 else "Normal"
 
-        # 创建新记录 - 现在使用正确的初始化方式
         new_record = GlucoseRecord(
             value=value,
-            time=data['time'],  # 让模型处理时间转换
+            time=data['time'], 
             notes=data.get('notes', '').strip()
         )
-        # 确保状态被正确设置
+
         new_record.status = status
 
         db.session.add(new_record)
@@ -82,7 +76,6 @@ def create_record():
     
 @glucose_api.route('/<int:record_id>', methods=['PUT'])
 def update_record(record_id):
-    """更新血糖记录"""
     try:
         data = request.get_json()
         if not data:
@@ -92,7 +85,6 @@ def update_record(record_id):
         if not record:
             return jsonify({"error": "Glucose record not found"}), 404
 
-        # 更新字段
         if 'value' in data:
             value = float(data['value'])
             if value < 1 or value > 30:
@@ -123,7 +115,6 @@ def update_record(record_id):
 
 @glucose_api.route('/<int:record_id>', methods=['DELETE'])
 def delete_record(record_id):
-    """删除血糖记录"""
     try:
         record = GlucoseRecord.query.get(record_id)
         if not record:
@@ -137,7 +128,6 @@ def delete_record(record_id):
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
 def get_glucose_status(value):
-    """根据血糖值确定状态"""
     if value < 4:
         return "Low"
     elif value > 7.8:

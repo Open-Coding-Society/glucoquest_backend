@@ -13,44 +13,33 @@ class GlucoseRecord(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
     def __init__(self, value, time, notes=None, _skip_status=False):
-        """
-        初始化血糖记录
-        :param value: 血糖值 (mmol/L)
-        :param time: 测量时间
-        :param notes: 备注信息
-        :param _skip_status: 内部使用，跳过自动状态计算
-        """
         self.value = float(value)
         self.time = time if isinstance(time, datetime) else datetime.fromisoformat(time)
         self.notes = notes or ""
         
-        # 只有当不跳过时才自动计算状态
         if not _skip_status:
             self.status = self._calculate_status(self.value)
 
     @staticmethod
     def _calculate_status(value):
-        """内部状态计算方法"""
         value = float(value)
         if value < 4: return "Low"
         if value > 7.8: return "High"
         return "Normal"
 
     def create(self):
-        """创建记录方法（可选保留）"""
         try:
             if self.value < 1 or self.value > 30:
-                raise ValueError("血糖值必须在1-30 mmol/L之间")
+                raise ValueError("value have to between 1-30 mmol/L")
                 
             db.session.add(self)
             db.session.commit()
             return self
         except Exception as e:
             db.session.rollback()
-            raise e  # 抛出异常由上层处理
+            raise e 
         
     def delete(self):
-        """删除血糖记录"""
         try:
             db.session.delete(self)
             db.session.commit()
@@ -60,7 +49,6 @@ class GlucoseRecord(db.Model):
             raise e
         
     def read(self):
-        """返回记录的字典表示"""
         return {
             'id': self.id,
             'value': self.value,
@@ -71,7 +59,6 @@ class GlucoseRecord(db.Model):
         }
         
     def update(self, value=None, time=None, notes=None):
-        """更新血糖记录"""
         try:
             if value is not None:
                 value = float(value)
@@ -95,7 +82,6 @@ class GlucoseRecord(db.Model):
 
     @staticmethod
     def _get_status(value):
-        """根据血糖值确定状态"""
         if value < 4:
             return "Low"
         if value > 7.8:
@@ -104,10 +90,8 @@ class GlucoseRecord(db.Model):
 
     @staticmethod
     def restore(data):
-        """从备份数据恢复血糖记录"""
         try:
             for item in data:
-                # 检查记录是否已存在
                 existing_record = GlucoseRecord.query.filter_by(
                     value=item['value'],
                     time=datetime.fromisoformat(item['time']),
@@ -129,14 +113,12 @@ class GlucoseRecord(db.Model):
             return False
 
 def initGlucose():
-    """初始化血糖记录表并添加示例数据"""
     try:
         db.create_all()
         
         if not GlucoseRecord.query.first():
             from datetime import datetime, timedelta
             
-            # 创建一些示例数据
             records = [
                 GlucoseRecord(
                     value=5.2,

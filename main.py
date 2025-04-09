@@ -44,6 +44,7 @@ from model.titanic import TitanicModel, initTitanic
 from model.diabetes import DiabetesModel, initDiabetesModel
 from model.foodchoice import Food, initFoods
 from model.glucose import GlucoseRecord, initGlucose
+from model.prediction import DiabetesPrediction, initPredictions
 
 # register URIs for api endpoints
 app.register_blueprint(messages_api) # Adi added this, messages for his website

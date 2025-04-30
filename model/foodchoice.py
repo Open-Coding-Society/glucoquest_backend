@@ -9,11 +9,12 @@ class Food(db.Model):
     id = db.Column(Integer, primary_key=True)
     number = db.Column(Integer)
     food = db.Column(String, nullable=False)
-    glycemic_index = db.Column(Integer, nullable=False)
+    glycemic_load = db.Column(Integer, nullable=False)
+    info = db.Column(String, nullable=False)
     image = db.Column(String)
 
     def __repr__(self):
-        return f"<Food(id={self.id}, number={self.number}, food={self.food}, glycemic_index={self.glycemic_index})>"
+        return f"<Food(id={self.id}, number={self.number}, food={self.food}, glycemic_load={self.glycemic_load}, info={self.info})>"
 
     # CRUD methods for Food class
     def create(self):
@@ -29,7 +30,8 @@ class Food(db.Model):
             'id': self.id,
             'number': self.number,
             'food': self.food,
-            'glycemic_index': self.glycemic_index,
+            'glycemic_load': self.glycemic_load,
+            'info': self.info,
             'image': self.image,
         }
 
@@ -39,15 +41,18 @@ class Food(db.Model):
         
         number = inputs.get("number", None)
         food = inputs.get("food", None)
-        glycemic_index = inputs.get("glycemic_index", None)
+        glycemic_load = inputs.get("glycemic_load", None)
+        info = inputs.get("info", None)
         image = inputs.get("image", None)
 
         if number:
             self.number = number
         if food:
             self.food = food
-        if glycemic_index:
-            self.glycemic_index = glycemic_index
+        if glycemic_load:
+            self.glycemic_load = glycemic_load
+        if info:
+            self.info = info
         if image:
             self.image = image
 
@@ -76,7 +81,7 @@ class Food(db.Model):
             # Check if the food already exists
             existing_food = Food.query.filter_by(
                 food=food_data.get('food'),
-                glycemic_index=food_data.get('glycemic_index')
+                glycemic_load=food_data.get('glycemic_load')
             ).first()
 
             if existing_food:
@@ -114,64 +119,148 @@ class Food(db.Model):
                     }
 
         return restored_foods
-'''
-        {
-            "number": 1,
-            "food": "",
-            "glycemic_index": 1,
-            "image": "{{site.baseurl}}/",
-        },
- '''
 
 def initFoods(): 
     food_data = [
         {
             "number": 1,
             "food": "Apple",
-            "glycemic_index": 41,
+            "glycemic_load": 5,
+            "info": "A delicious and low-carb snack",
             "image": "apple.png",
         },
         {
             "number": 1,
             "food": "Banana",
-            "glycemic_index": 62,
+            "glycemic_load": 10.1,
+            "info": "Good for increasing blood glucose when needed, but to be eaten with care",
             "image": "banana.png",
         },
         {
             "number": 2,
             "food": "Waffles",
-            "glycemic_index": 77,
-            "image": "waffle.png",
+            "glycemic_load": 54.3,
+            "info": "A carb-heavy start to the day can trigger high blood glucose in the morning",
+            "image": "waffles.png",
         },
         {
             "number": 2,
             "food": "Oatmeal",
-            "glycemic_index": 53,
+            "glycemic_load": 9,
+            "info": "A classic, customizable choice with less carbohydrates",
             "image": "oatmeal.png",
         },
         {
             "number": 3,
             "food": "Yogurt",
-            "glycemic_index": 32,
+            "glycemic_load": 1.3,
+            "info": "A refreshing snack to get through the day",
             "image": "yogurt.png",
         },
         {
             "number": 3,
             "food": "Popcorn",
-            "glycemic_index": 62,
+            "glycemic_load": 40.7,
+            "info": "Fine for special occasions, but to be eaten sparingly",
             "image": "popcorn.png",
         },
         {
             "number": 4,
             "food": "Steamed white rice",
-            "glycemic_index": 70,
+            "glycemic_load": 56,
+            "info": "Classic dinner component with hidden carbohydrates which can cause late-night glucose spikes",
             "image": "whiterice.png",
         },
         {
             "number": 4,
             "food": "Salmon",
-            "glycemic_index": 0,
+            "glycemic_load": 0,
+            "info": "As a protien, salmon has no carbohydrates and a glycemic load of 0!",
             "image": "salmon.png",
+        },
+        {
+            "number": 5,
+            "food": "Chocolate",
+            "glycemic_load": 29.9,
+            "info": "Note the difference in glycemic load between the chocolates",
+            "image": "chocolate.png",
+        },
+        {
+            "number": 5,
+            "food": "Dark chocolate",
+            "glycemic_load": 13.8,
+            "info": "Sometimes a food can still be diabetes-friendly with minor adjustments",
+            "image": "darkchocolate.png",
+        },
+        {
+            "number": 6,
+            "food": "Milk",
+            "glycemic_load": 1.6,
+            "info": "Perfect breakfast companion",
+            "image": "milk.png",
+        },
+        {
+            "number": 6,
+            "food": "Soda",
+            "glycemic_load": 6.0,
+            "info": "To be dranken mindfully",
+            "image": "soda.png",
+        },
+        {
+            "number": 7,
+            "food": "Chicken",
+            "glycemic_load": 0,
+            "info": "Sometimes, multiple options can be good for blood glucose levels",
+            "image": "chicken.png",
+        },
+        {
+            "number": 7,
+            "food": "Beef",
+            "glycemic_load": 0,
+            "info": "Sometimes, multiple options can be good for blood glucose levels",
+            "image": "beef.png",
+        },
+        {
+            "number": 8,
+            "food": "Boiled potato",
+            "glycemic_load": 12.3,
+            "info": "Notice how preparing the same food differently can vastly change its available carbs and glycemic load",
+            "image": "boiledpotato.png",
+        },
+        {
+            "number": 8,
+            "food": "Fried potato",
+            "glycemic_load": 19.1,
+            "info": "Notice how preparing the same food differently can vastly change its available carbs and glycemic load",
+            "image": "friedpotato.png",
+        },
+        {
+            "number": 9,
+            "food": "White bread",
+            "glycemic_load": 39.4,
+            "info": "Typical sandwich ingredient",
+            "image": "whitebread.png",
+        },
+        {
+            "number": 9,
+            "food": "Lettuce",
+            "glycemic_load": 0.5,
+            "info": "Low-carb alternative to bread, which can be used to make lettuce wraps or other meals",
+            "image": "lettuce.png",
+        },
+        {
+            "number": 10,
+            "food": "Spaghetti",
+            "glycemic_load": 12.8,
+            "info": "Comfort food for many",
+            "image": "spaghetti.png",
+        },
+        {
+            "number": 10,
+            "food": "Pizza",
+            "glycemic_load": 19.8,
+            "info": "Comfort food for many",
+            "image": "pizza.png",
         },
     ]       
     
@@ -181,7 +270,8 @@ def initFoods():
             new_food = Food(
                 number=food["number"],
                 food=food["food"],
-                glycemic_index=food["glycemic_index"],
+                glycemic_load=food["glycemic_load"],
+                info=food["info"],
                 image=food["image"]
             )
             db.session.add(new_food) 

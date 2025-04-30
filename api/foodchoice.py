@@ -46,7 +46,8 @@ def get_food():
             {
                 'number': food.number,
                 'food': food.food,
-                'glycemic_index': food.glycemic_index,
+                'glycemic_load': food.glycemic_load,
+                'info': food.info,
                 'image': f"/images/food/{food.image}" if food.image else None
             }
             for food in selected_foods
@@ -55,3 +56,11 @@ def get_food():
         return jsonify(food_data), 200
     except Exception as e:
         return jsonify({'error': 'Failed to fetch foods', 'message': str(e)}), 500
+
+@food_api.route('/info', methods=['GET'])
+def get_food_info():
+    food_name = request.args.get('food', type=str)
+    food = Food.query.filter_by(food=food_name).first()
+    if food:
+        return jsonify({'info': food.info})
+    return jsonify({'info': 'No info found'}), 404

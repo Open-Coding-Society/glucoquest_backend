@@ -203,7 +203,7 @@ def initFoods():
             "number": 6,
             "food": "Soda",
             "glycemic_load": 6.0,
-            "info": "To be dranken mindfully",
+            "info": "To be drank mindfully",
             "image": "soda.png",
         },
         {

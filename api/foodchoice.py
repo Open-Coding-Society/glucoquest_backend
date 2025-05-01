@@ -44,6 +44,7 @@ def get_food():
         # Convert to JSON
         food_data = [
             {
+                'id': food.id,
                 'number': food.number,
                 'food': food.food,
                 'glycemic_load': food.glycemic_load,
@@ -57,10 +58,16 @@ def get_food():
     except Exception as e:
         return jsonify({'error': 'Failed to fetch foods', 'message': str(e)}), 500
 
-@food_api.route('/info', methods=['GET'])
-def get_food_info():
-    food_name = request.args.get('food', type=str)
-    food = Food.query.filter_by(food=food_name).first()
-    if food:
-        return jsonify({'info': food.info})
-    return jsonify({'info': 'No info found'}), 404
+@food_api.route('/info/<int:food_id>', methods=['GET'])
+def get_food_info(food_id):
+    try:
+        food = Food.query.get(food_id)
+        if not food:
+            return jsonify({'error': 'Food not found'}), 404
+
+        return jsonify({
+            'food': food.food,
+            'info': food.info
+        }), 200
+    except Exception as e:
+        return jsonify({'error': 'Failed to fetch food info', 'message': str(e)}), 500

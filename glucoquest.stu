@@ -4,7 +4,7 @@ server {
         server_name holiday.stu.nighthawkcodingsociety.com;
 
         location / {
-            proxy_pass http://localhost:8206;
+            proxy_pass http://localhost:8520;
 
             # Preflighted requests
             if ($request_method = OPTIONS) {

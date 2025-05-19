@@ -227,9 +227,7 @@ def restore_data_command():
 # Register the custom command group with the Flask application
 app.cli.add_command(custom_cli)
 # Define the /chat route using the imported function
-@app.route('/chat', methods=['POST', 'GET'])
-def chat_route():
-    return chat()
+
 # this runs the flask application on the development server
 if __name__ == "__main__":
     # change name for testing

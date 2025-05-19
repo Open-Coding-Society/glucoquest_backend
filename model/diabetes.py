@@ -8,6 +8,7 @@ import pandas as pd
 import numpy as np
 from ucimlrepo import fetch_ucirepo
 import joblib
+import os
 
 class DiabetesModel:
     """A class for predicting diabetes risk with probability outputs (0-100%)."""
@@ -28,13 +29,22 @@ class DiabetesModel:
         
     def _load_data(self):
         """Load and prepare the dataset."""
-        cdc_diabetes = fetch_ucirepo(id=891)
-        self.data = pd.concat([cdc_diabetes.data.features, 
-                              cdc_diabetes.data.targets], axis=1)
+        cache_path = 'instance/volumes/cdc_diabetes.csv'
         
-        # Sample a subset if the full dataset is too large
+        if os.path.exists(cache_path):
+            print(f"Loading diabetes data from cache: {cache_path}")
+            self.data = pd.read_csv(cache_path)
+        else:
+            print("Fetching diabetes data from UCI repository...")
+            cdc_diabetes = fetch_ucirepo(id=891)
+            self.data = pd.concat([cdc_diabetes.data.features, cdc_diabetes.data.targets], axis=1)
+            os.makedirs(os.path.dirname(cache_path), exist_ok=True)
+            self.data.to_csv(cache_path, index=False)
+            print(f"Data saved to cache: {cache_path}")
+        
+        # Sample subset if dataset is very large (optional)
         self.data = self.data.sample(frac=0.3, random_state=42) if len(self.data) > 100000 else self.data
-        
+
     def _clean(self):
         """Clean and preprocess the data."""
         # Handle missing values

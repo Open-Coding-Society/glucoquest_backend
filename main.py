@@ -9,7 +9,6 @@ from flask_login import current_user, login_required
 from flask import current_app
 from werkzeug.security import generate_password_hash
 import shutil
-from api.giftinator import chat  # Import the chat functionfrom flask import Flask
 from flask_cors import CORS
 from flask import Flask
 # import "objects" from "this" project

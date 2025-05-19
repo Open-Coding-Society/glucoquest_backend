@@ -53,9 +53,13 @@ from model.foodchoice import Food, initFoods
 from model.glucose import GlucoseRecord, initGlucose
 from model.prediction import DiabetesPrediction, initPredictions
 <<<<<<< HEAD
+<<<<<<< HEAD
 from model.scores import init_scores
 =======
 from model.foodlog import FoodLog, initFoodlog
+=======
+from model.foodlog import FoodLog, initFoodLogs
+>>>>>>> 565c758 (done)
 
 >>>>>>> c00137b (foodlog)
 
@@ -183,10 +187,14 @@ def generate_data():
     initGlucose()
     initPredictions()
 <<<<<<< HEAD
+<<<<<<< HEAD
     init_scores()
 =======
     initFoodlog()
 >>>>>>> c00137b (foodlog)
+=======
+    initFoodLogs()
+>>>>>>> 565c758 (done)
 
 # Backup the old database
 def backup_database(db_uri, backup_uri):

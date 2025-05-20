@@ -1,8 +1,12 @@
+import jwt
 from flask import Blueprint, request, jsonify, g
 from flask_restful import Api, Resource
+from __init__ import db
 from api.jwt_authorize import token_required
 from model.foodlog import FoodLog
+from model.channel import Channel
 
+# Blueprint for FoodLog API
 foodlog_api = Blueprint('foodlog_api', __name__, url_prefix='/api')
 api = Api(foodlog_api)
 
@@ -10,37 +14,43 @@ class FoodLogAPI:
     class _CRUD(Resource):
         @token_required()
         def post(self):
+            """Add a new food log entry."""
             current_user = g.current_user
             data = request.get_json()
-            meal = data.get("meal", "").lower()
 
-            if not meal:
-                return {'message': 'Meal is required'}, 400
+            if not data or 'action' not in data or 'impact' not in data:
+                return {"message": "Action and impact are required"}, 400
 
-            high = ["candy", "soda", "ice cream"]
-            medium = ["banana", "bread", "rice"]
-            low = ["chicken", "salad", "eggs"]
+            new_log = FoodLog(user_id=current_user.id, action=data['action'], impact=data['impact'])
+            db.session.add(new_log)
+            db.session.commit()
 
-            impact = "Unknown"
-            for word in meal.split():
-                if word in high:
-                    impact = "High"
-                    break
-                elif word in medium:
-                    impact = "Medium"
-                    break
-                elif word in low:
-                    impact = "Low"
-                    break
-
-            log = FoodLog(meal=meal, impact=impact, user_id=current_user.id)
-            log.create()
-            return jsonify(log.read())
+            return new_log.read(), 201
 
         @token_required()
         def get(self):
+            """Retrieve all food logs for the user."""
             current_user = g.current_user
             logs = FoodLog.query.filter_by(user_id=current_user.id).all()
-            return jsonify([log.read() for log in logs])
+            return [log.read() for log in logs], 200
 
+        @token_required()
+        def delete(self):
+            """Remove a food log entry."""
+            current_user = g.current_user
+            data = request.get_json()
+
+            if not data or 'id' not in data:
+                return {"message": "Log ID is required"}, 400
+
+            log = FoodLog.query.filter_by(id=data['id'], user_id=current_user.id).first()
+            if not log:
+                return {"message": "Log not found"}, 404
+
+            db.session.delete(log)
+            db.session.commit()
+
+            return {"message": "Log removed"}, 200
+
+    # Register the resource with API
     api.add_resource(_CRUD, '/foodlog')

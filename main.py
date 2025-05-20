@@ -28,7 +28,6 @@ from api.messages_api import messages_api # Adi added this, messages for his web
 from api.vote import vote_api
 from api.titanic import titanic_api
 from api.diabetes import diabetes_api
-from api.foodchoice import food_api
 from api.glucose import glucose_api
 from api.crossword import crossword_api
 from api.prediction import prediction_api 

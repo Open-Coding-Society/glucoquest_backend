@@ -14,6 +14,8 @@ from flask import Flask
 # import "objects" from "this" project
 from __init__ import app, db, login_manager  # Key Flask objects
 CORS(app, supports_credentials=True)
+CORS(app, supports_credentials=True, origins=["http://127.0.0.1:4887"])
+
 
 # API endpoints
 from api.user import user_api

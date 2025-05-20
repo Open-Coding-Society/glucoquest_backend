@@ -28,7 +28,6 @@ from api.messages_api import messages_api # Adi added this, messages for his web
 from api.vote import vote_api
 from api.titanic import titanic_api
 from api.diabetes import diabetes_api
-from api.glucose import glucose_api
 from api.crossword import crossword_api
 from api.prediction import prediction_api 
 from api.scores import score_api
@@ -43,7 +42,6 @@ from model.nestPost import NestPost, initNestPosts # Justin added this, custom f
 from model.vote import Vote, initVotes
 from model.titanic import TitanicModel, initTitanic
 from model.diabetes import DiabetesModel, initDiabetesModel
-from model.glucose import GlucoseRecord, initGlucose
 from model.prediction import DiabetesPrediction, initPredictions
 from model.scores import init_scores
 from model.foodlog import FoodLog, initFoodLogs
@@ -63,7 +61,6 @@ app.register_blueprint(nestImg_api)
 app.register_blueprint(vote_api)
 app.register_blueprint(titanic_api) 
 app.register_blueprint(diabetes_api)
-app.register_blueprint(glucose_api)
 app.register_blueprint(prediction_api)
 app.register_blueprint(score_api)
 app.register_blueprint(foodlog_api)
@@ -164,7 +161,6 @@ def generate_data():
     initVotes()
     initTitanic()
     initDiabetesModel()
-    initGlucose()
     initPredictions()
     init_scores()
     initFoodLogs()
@@ -188,8 +184,7 @@ def extract_data():
         data['groups'] = [group.read() for group in Group.query.all()]
         data['channels'] = [channel.read() for channel in Channel.query.all()]
         data['posts'] = [post.read() for post in Post.query.all()]
-        data['food'] = [food.read() for food in Food.query.all()]
-        data['glucose'] = [glucose.read() for glucose in GlucoseRecord.query.all()]
+        data['food'] = [food.read() for food in FoodLog.query.all()]
     return data
 # Save extracted data to JSON files
 def save_data_to_json(data, directory='backup'):
@@ -214,7 +209,6 @@ def restore_data(data):
         _ = Group.restore(data['groups'], users)
         _ = Channel.restore(data['channels'])
         _ = Post.restore(data['posts'])
-        _ = GlucoseRecord.restore(data['glucose'])
 
     print("Data restored to the new database.")
 # Define a command to backup data

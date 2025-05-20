@@ -1,5 +1,8 @@
-from __init__ import db
+from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from sqlalchemy.orm import relationship
+from __init__ import db
+
 
 class FoodLog(db.Model):
     __tablename__ = 'food_logs'
@@ -9,7 +12,11 @@ class FoodLog(db.Model):
     impact = db.Column(db.String(50), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
-    user_id = db.Column(db.Integer, nullable=False)  # ✅ no ForeignKey if you don’t have a user table
+    user_id = db.Column(db.Integer, nullable=False)  # ❗ Fixed: removed ForeignKey to 'frostbytes.id'
+
+    # ❌ REMOVED:
+    # user = relationship('Frostbyte', backref='food_logs')  
+    # (because there’s no Frostbyte model)
 
     def __init__(self, meal, impact, user_id):
         self.meal = meal
@@ -36,3 +43,17 @@ class FoodLog(db.Model):
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+
+
+# ------------------ Sample Seeder ------------------ #
+def initFoodLogs():
+    from model.foodlog import FoodLog  # avoid circular imports
+    sample_logs = [
+        {"meal": "banana and toast", "impact": "Medium", "user_id": 1},
+        {"meal": "salad and chicken", "impact": "Low", "user_id": 2},
+        {"meal": "ice cream and soda", "impact": "High", "user_id": 3},
+    ]
+    for data in sample_logs:
+        log = FoodLog(meal=data["meal"], impact=data["impact"], user_id=data["user_id"])
+        db.session.add(log)
+    db.session.commit()

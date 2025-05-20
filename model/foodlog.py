@@ -1,27 +1,20 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from sqlalchemy.orm import relationship
 from __init__ import db
-
 
 class FoodLog(db.Model):
     __tablename__ = 'food_logs'
 
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False)
     meal = db.Column(db.String(255), nullable=False)
     impact = db.Column(db.String(50), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
-    user_id = db.Column(db.Integer, nullable=False)  # ❗ Fixed: removed ForeignKey to 'frostbytes.id'
-
-    # ❌ REMOVED:
-    # user = relationship('Frostbyte', backref='food_logs')  
-    # (because there’s no Frostbyte model)
-
-    def __init__(self, meal, impact, user_id):
+    def __init__(self, user_id, meal, impact):
+        self.user_id = user_id
         self.meal = meal
         self.impact = impact
-        self.user_id = user_id
 
     def create(self):
         db.session.add(self)
@@ -30,10 +23,10 @@ class FoodLog(db.Model):
     def read(self):
         return {
             "id": self.id,
+            "user_id": self.user_id,
             "meal": self.meal,
             "impact": self.impact,
-            "timestamp": self.timestamp.isoformat(),
-            "user_id": self.user_id
+            "timestamp": self.timestamp.isoformat()
         }
 
     def update(self):
@@ -45,15 +38,14 @@ class FoodLog(db.Model):
         db.session.commit()
 
 
-# ------------------ Sample Seeder ------------------ #
+# Seeder
 def initFoodLogs():
-    from model.foodlog import FoodLog  # avoid circular imports
     sample_logs = [
-        {"meal": "banana and toast", "impact": "Medium", "user_id": 1},
-        {"meal": "salad and chicken", "impact": "Low", "user_id": 2},
-        {"meal": "ice cream and soda", "impact": "High", "user_id": 3},
+        {"user_id": 1, "meal": "banana and toast", "impact": "Medium"},
+        {"user_id": 2, "meal": "salad and chicken", "impact": "Low"},
+        {"user_id": 3, "meal": "ice cream and soda", "impact": "High"},
     ]
     for data in sample_logs:
-        log = FoodLog(meal=data["meal"], impact=data["impact"], user_id=data["user_id"])
+        log = FoodLog(user_id=data["user_id"], meal=data["meal"], impact=data["impact"])
         db.session.add(log)
     db.session.commit()

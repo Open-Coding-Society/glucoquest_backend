@@ -32,10 +32,6 @@ from api.foodchoice import food_api
 from api.glucose import glucose_api
 from api.crossword import crossword_api
 from api.prediction import prediction_api 
-<<<<<<< HEAD
-=======
-
->>>>>>> c00137b (foodlog)
 from api.scores import score_api
 from api.foodlog import foodlog_api
 # database Initialization functions

@@ -33,12 +33,11 @@ from api.glucose import glucose_api
 from api.crossword import crossword_api
 from api.prediction import prediction_api 
 <<<<<<< HEAD
-from api.scores import score_api
 =======
-from api.foodlog import foodlog_api
 
 >>>>>>> c00137b (foodlog)
-
+from api.scores import score_api
+from api.foodlog import foodlog_api
 # database Initialization functions
 from model.user import User, initUsers
 from model.section import Section, initSections
@@ -49,19 +48,10 @@ from model.nestPost import NestPost, initNestPosts # Justin added this, custom f
 from model.vote import Vote, initVotes
 from model.titanic import TitanicModel, initTitanic
 from model.diabetes import DiabetesModel, initDiabetesModel
-from model.foodchoice import Food, initFoods
 from model.glucose import GlucoseRecord, initGlucose
 from model.prediction import DiabetesPrediction, initPredictions
-<<<<<<< HEAD
-<<<<<<< HEAD
 from model.scores import init_scores
-=======
-from model.foodlog import FoodLog, initFoodlog
-=======
 from model.foodlog import FoodLog, initFoodLogs
->>>>>>> 565c758 (done)
-
->>>>>>> c00137b (foodlog)
 
 # register URIs for api endpoints
 app.register_blueprint(messages_api) # Adi added this, messages for his website
@@ -78,15 +68,11 @@ app.register_blueprint(nestImg_api)
 app.register_blueprint(vote_api)
 app.register_blueprint(titanic_api) 
 app.register_blueprint(diabetes_api)
-app.register_blueprint(food_api)
 app.register_blueprint(glucose_api)
 app.register_blueprint(prediction_api)
-<<<<<<< HEAD
 app.register_blueprint(score_api)
-=======
 app.register_blueprint(foodlog_api)
 
->>>>>>> c00137b (foodlog)
 # Tell Flask-Login the view function name of your login route
 login_manager.login_view = "login"
 @login_manager.unauthorized_handler
@@ -183,18 +169,10 @@ def generate_data():
     initVotes()
     initTitanic()
     initDiabetesModel()
-    initFoods()
     initGlucose()
     initPredictions()
-<<<<<<< HEAD
-<<<<<<< HEAD
     init_scores()
-=======
-    initFoodlog()
->>>>>>> c00137b (foodlog)
-=======
     initFoodLogs()
->>>>>>> 565c758 (done)
 
 # Backup the old database
 def backup_database(db_uri, backup_uri):

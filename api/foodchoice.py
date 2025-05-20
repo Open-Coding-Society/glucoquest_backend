@@ -1,73 +1,56 @@
-import base64
+import jwt
 from flask import Blueprint, request, jsonify, g
-from flask_restful import Api
-from flask_login import current_user, login_required
-from api.jwt_authorize import token_required
-from model.foodchoice import Food
+from flask_restful import Api, Resource
 from __init__ import db
+from api.jwt_authorize import token_required
+from model.foodlog import FoodLog
+from model.channel import Channel
 
-# Define Blueprint and Api
-food_api = Blueprint('food_api', __name__, url_prefix='/api/foodchoice')
-api = Api(food_api)
+# Blueprint for FoodLog API
+foodlog_api = Blueprint('foodlog_api', __name__, url_prefix='/api')
+api = Api(foodlog_api)
 
-# Helper function to convert image to Base64
-def encode_image_to_base64(image_path):
-    try:
-        with open(image_path, "rb") as image_file:
-            return base64.b64encode(image_file.read()).decode("utf-8")
-    except FileNotFoundError:
-        return None
+class FoodLogAPI:
+    class _CRUD(Resource):
+        @token_required()
+        def post(self):
+            """Add a new food log entry."""
+            current_user = g.current_user
+            data = request.get_json()
 
-@food_api.route('/', methods=['GET'])
-def get_food():
-    try:
-        pair_number = request.args.get('number', type=int)
+            if not data or 'action' not in data or 'impact' not in data:
+                return {"message": "Action and impact are required"}, 400
 
-        # Query all foods
-        foods = Food.query.all()
+            new_log = FoodLog(user_id=current_user.id, action=data['action'], impact=data['impact'])
+            db.session.add(new_log)
+            db.session.commit()
 
-        # Group foods by number
-        food_dict = {}
-        for food in foods:
-            food_dict.setdefault(food.number, []).append(food)
+            return new_log.read(), 201
 
-        # Use the number if provided, otherwise pick first valid pair
-        if pair_number:
-            selected_foods = food_dict.get(pair_number, [])[:2]
-        else:
-            selected_foods = next((foods[:2] for foods in food_dict.values() if len(foods) >= 2), [])
+        @token_required()
+        def get(self):
+            """Retrieve all food logs for the user."""
+            current_user = g.current_user
+            logs = FoodLog.query.filter_by(user_id=current_user.id).all()
+            return [log.read() for log in logs], 200
 
-        # If no foods matched (e.g. number too high), return empty
-        if not selected_foods:
-            return jsonify([]), 200
+        @token_required()
+        def delete(self):
+            """Remove a food log entry."""
+            current_user = g.current_user
+            data = request.get_json()
 
-        # Convert to JSON
-        food_data = [
-            {
-                'id': food.id,
-                'number': food.number,
-                'food': food.food,
-                'glycemic_load': food.glycemic_load,
-                'info': food.info,
-                'image': f"/images/food/{food.image}" if food.image else None
-            }
-            for food in selected_foods
-        ]
+            if not data or 'id' not in data:
+                return {"message": "Log ID is required"}, 400
 
-        return jsonify(food_data), 200
-    except Exception as e:
-        return jsonify({'error': 'Failed to fetch foods', 'message': str(e)}), 500
+            log = FoodLog.query.filter_by(id=data['id'], user_id=current_user.id).first()
+            if not log:
+                return {"message": "Log not found"}, 404
 
-@food_api.route('/info/<int:food_id>', methods=['GET'])
-def get_food_info(food_id):
-    try:
-        food = Food.query.get(food_id)
-        if not food:
-            return jsonify({'error': 'Food not found'}), 404
+            db.session.delete(log)
+            db.session.commit()
 
-        return jsonify({
-            'food': food.food,
-            'info': food.info
-        }), 200
-    except Exception as e:
-        return jsonify({'error': 'Failed to fetch food info', 'message': str(e)}), 500
+            return {"message": "Log removed"}, 200
+
+    # Register the resource with API
+    api.add_resource(_CRUD, '/foodlog')

@@ -32,6 +32,7 @@ from api.crossword import crossword_api
 from api.prediction import prediction_api 
 from api.scores import score_api
 from api.foodlog import foodlog_api
+from api.flashcards import flashcards_api
 # database Initialization functions
 from model.user import User, initUsers
 from model.section import Section, initSections
@@ -45,6 +46,7 @@ from model.diabetes import DiabetesModel, initDiabetesModel
 from model.prediction import DiabetesPrediction, initPredictions
 from model.scores import init_scores
 from model.foodlog import FoodLog, initFoodLogs
+from model.flashcards import Flashcard, initFlashcards
 
 # register URIs for api endpoints
 app.register_blueprint(messages_api) # Adi added this, messages for his website
@@ -64,6 +66,7 @@ app.register_blueprint(diabetes_api)
 app.register_blueprint(prediction_api)
 app.register_blueprint(score_api)
 app.register_blueprint(foodlog_api)
+app.register_blueprint(flashcards_api)
 
 # Tell Flask-Login the view function name of your login route
 login_manager.login_view = "login"
@@ -164,6 +167,7 @@ def generate_data():
     initPredictions()
     init_scores()
     initFoodLogs()
+    initFlashcards()
 
 # Backup the old database
 def backup_database(db_uri, backup_uri):

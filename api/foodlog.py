@@ -4,7 +4,6 @@ from flask_restful import Api, Resource
 from __init__ import db
 from api.jwt_authorize import token_required
 from model.foodlog import FoodLog
-from model.channel import Channel
 
 # Blueprint for FoodLog API
 foodlog_api = Blueprint('foodlog_api', __name__, url_prefix='/api')
@@ -18,10 +17,10 @@ class FoodLogAPI:
             current_user = g.current_user
             data = request.get_json()
 
-            if not data or 'action' not in data or 'impact' not in data:
-                return {"message": "Action and impact are required"}, 400
+            if not data or 'meal' not in data or 'impact' not in data:
+                return {"message": "Meal and impact are required"}, 400
 
-            new_log = FoodLog(user_id=current_user.id, action=data['action'], impact=data['impact'])
+            new_log = FoodLog(user_id=current_user.id, meal=data['meal'], impact=data['impact'])
             db.session.add(new_log)
             db.session.commit()
 
@@ -52,5 +51,4 @@ class FoodLogAPI:
 
             return {"message": "Log removed"}, 200
 
-    # Register the resource with API
     api.add_resource(_CRUD, '/foodlog')

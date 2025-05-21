@@ -39,7 +39,8 @@ class GlucoseCRUD(Resource):
                 value=value,
                 time=datetime.fromisoformat(data['time']),
                 notes=data.get('notes', '').strip(),
-                status=status
+                status=status,
+                created_at=datetime.utcnow()
             )
             db.session.add(record)
             db.session.commit()

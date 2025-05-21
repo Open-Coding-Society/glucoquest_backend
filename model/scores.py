@@ -39,6 +39,7 @@ class Score(db.Model):
         return {
             "id": self.id,
             "user_id": self.user_id,
+            "username": self.user.name if self.user else f"User {self.user_id}",  # Changed to use .name
             "points": self.points,
             "level": self.level,
             "created": self.created.isoformat(),

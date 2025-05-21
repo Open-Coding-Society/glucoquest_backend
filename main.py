@@ -35,6 +35,7 @@ from api.prediction import prediction_api
 from api.scores import score_api
 from api.foodlog import foodlog_api
 from api.flashcards import flashcards_api
+from api.glucose import glucose_api
 # database Initialization functions
 from model.user import User, initUsers
 from model.section import Section, initSections
@@ -49,7 +50,7 @@ from model.prediction import DiabetesPrediction, initPredictions
 from model.scores import init_scores
 from model.foodlog import FoodLog, initFoodLogs
 from model.flashcards import Flashcard, initFlashcards
-
+from model.glucose import GlucoseRecord, initGlucose
 # register URIs for api endpoints
 app.register_blueprint(messages_api) # Adi added this, messages for his website
 app.register_blueprint(user_api)
@@ -59,6 +60,7 @@ app.register_blueprint(channel_api)
 app.register_blueprint(group_api)
 app.register_blueprint(section_api)
 app.register_blueprint(crossword_api)
+app.register_blueprint(glucose_api)
 # Added new files to create nestPosts, uses a different format than Mortensen and didn't want to touch his junk
 app.register_blueprint(nestPost_api)
 app.register_blueprint(nestImg_api)
@@ -170,6 +172,7 @@ def generate_data():
     init_scores()
     initFoodLogs()
     initFlashcards()
+    initGlucose()
 
 # Backup the old database
 def backup_database(db_uri, backup_uri):
@@ -191,6 +194,7 @@ def extract_data():
         data['channels'] = [channel.read() for channel in Channel.query.all()]
         data['posts'] = [post.read() for post in Post.query.all()]
         data['food'] = [food.read() for food in FoodLog.query.all()]
+        data['glucose'] = [glucose.read() for glucose in GlucoseRecord.query.all()]
     return data
 # Save extracted data to JSON files
 def save_data_to_json(data, directory='backup'):
@@ -215,6 +219,7 @@ def restore_data(data):
         _ = Group.restore(data['groups'], users)
         _ = Channel.restore(data['channels'])
         _ = Post.restore(data['posts'])
+        _ = GlucoseRecord.restore(data['glucose'])
 
     print("Data restored to the new database.")
 # Define a command to backup data

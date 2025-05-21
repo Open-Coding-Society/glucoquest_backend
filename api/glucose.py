@@ -10,7 +10,7 @@ api = Api(glucose_api)
 
 class GlucoseAPI:
     class _CRUD(Resource):
-        @token_required()
+        #@token_required()
         def get(self):
             """Get all glucose records (newest first)"""
             records = GlucoseRecord.query.order_by(GlucoseRecord.time.desc()).all()
@@ -25,7 +25,7 @@ class GlucoseAPI:
                 } for r in records
             ])
 
-        @token_required()
+        #@token_required()
         def post(self):
             """Create a new glucose record"""
             data = request.get_json()
@@ -56,7 +56,7 @@ class GlucoseAPI:
                 db.session.rollback()
                 return {'error': str(e)}, 500
 
-        @token_required()
+        #@token_required()
         def put(self):
             """Update a glucose record by id"""
             data = request.get_json()
@@ -89,7 +89,7 @@ class GlucoseAPI:
                 db.session.rollback()
                 return {'error': str(e)}, 500
 
-        @token_required()
+        #@token_required()
         def delete(self):
             """Delete a glucose record by id"""
             data = request.get_json()
@@ -115,7 +115,7 @@ class GlucoseAPI:
             return "Normal"
 
     class _BY_ID(Resource):
-        @token_required()
+        #@token_required()
         def get(self, record_id):
             """Get a single glucose record by id"""
             record = GlucoseRecord.query.get(record_id)

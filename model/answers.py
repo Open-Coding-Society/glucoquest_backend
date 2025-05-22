@@ -112,17 +112,14 @@ class Answers(db.Model):
 def initAnswers(): 
     answer_data = [
         {
-            "food": "Apple",
-            "glycemic_load": 5,
-            "info": "A delicious and low-carb snack",
-            "image": "apple.png",
+            "answer_id": "a",
+            "answer": "Sample text here",
+            "trivia_id": 1,
         },
         {
-            "number": 1,
-            "food": "Banana",
-            "glycemic_load": 10.1,
-            "info": "Good for increasing blood glucose when needed, but to be eaten with care",
-            "image": "banana.png",
+            "answer_id": "b",
+            "answer": "Sample text here2",
+            "trivia_id": 1,
         },
     ]       
     

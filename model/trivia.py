@@ -8,10 +8,10 @@ class Trivia(db.Model):
     __tablename__ = 'trivia'
     id = db.Column(Integer, primary_key=True)
     question = db.Column(db.String, nullable=False)
-    correct_option = db.Column(db.String(1), nullable=False)
+    correct_answer = db.Column(db.String(1), nullable=False)
 
     def __repr__(self):
-        return f"<Trivia(id={self.id}, question={self.question}, correct_option={self.correct_option})>"
+        return f"<Trivia(id={self.id}, question={self.question}, correct_answer={self.correct_answer})>"
 
     # CRUD methods for Trivia class
     def create(self):
@@ -26,7 +26,7 @@ class Trivia(db.Model):
         return {
             'id': self.id,
             'question': self.question,
-            'correct_option': self.correct_option,
+            'correct_answer': self.correct_answer,
         }
 
     def update(self, inputs):
@@ -34,12 +34,12 @@ class Trivia(db.Model):
             return self
         
         question = inputs.get("question", None)
-        correct_option = inputs.get("correct_option", None)
+        correct_answer = inputs.get("correct_answer", None)
 
         if question:
             self.question = question
-        if correct_option:
-            self.correct_option = correct_option
+        if correct_answer:
+            self.correct_answer = correct_answer
 
         try:
             db.session.commit()
@@ -107,17 +107,12 @@ class Trivia(db.Model):
 def initQuestions(): 
     question_data = [
         {
-            "food": "Apple",
-            "glycemic_load": 5,
-            "info": "A delicious and low-carb snack",
-            "image": "apple.png",
+            "question": "Apple",
+            "correct_answer": "b",
         },
         {
-            "number": 1,
-            "food": "Banana",
-            "glycemic_load": 10.1,
-            "info": "Good for increasing blood glucose when needed, but to be eaten with care",
-            "image": "banana.png",
+            "question": "Banana",
+            "correct_answer": "a",
         },
     ]       
     
@@ -125,8 +120,8 @@ def initQuestions():
     for question in question_data:
         if not Trivia.query.filter_by(question=question["question"]).first():  # check if question already exists aviods duplicates
             new_question = Trivia(
-                number=question["question"],
-                correct_option=question["correct_option"],
+                question=question["question"],
+                correct_answer=question["correct_answer"],
             )
             db.session.add(new_question) 
     

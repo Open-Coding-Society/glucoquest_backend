@@ -1,0 +1,145 @@
+from flask_restful import Api, Resource
+from sqlalchemy import Text, JSON
+from __init__ import app, db
+from sqlalchemy import Column, Integer, String, Text
+from sqlite3 import IntegrityError
+
+class Trivia(db.Model):
+    __tablename__ = 'trivia'
+    id = db.Column(Integer, primary_key=True)
+    question = db.Column(db.String, nullable=False)
+    correct_option = db.Column(db.String(1), nullable=False)
+
+    def __repr__(self):
+        return f"<Trivia(id={self.id}, question={self.question}, correct_option={self.correct_option})>"
+
+    # CRUD methods for Trivia class
+    def create(self):
+        try:
+            db.session.add(self)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            raise e
+
+    def read(self):
+        return {
+            'id': self.id,
+            'question': self.question,
+            'correct_option': self.correct_option,
+        }
+
+    def update(self, inputs):
+        if not isinstance(inputs, dict):
+            return self
+        
+        question = inputs.get("question", None)
+        correct_option = inputs.get("correct_option", None)
+
+        if question:
+            self.question = question
+        if correct_option:
+            self.correct_option = correct_option
+
+        try:
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            raise e
+        return self
+
+    def delete(self):
+        try:
+            db.session.delete(self)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            raise e
+
+    @staticmethod
+    def restore(data):
+        restored_questions = {}
+
+        for question_data in data:  
+            question_data.pop('id', None)
+
+            # Check if the question already exists
+            existing_question = Trivia.query.filter_by(
+                question=question_data.get('question'),
+            ).first()
+
+            if existing_question:
+                # Update the existing question with new data
+                for key, value in question_data.items():
+                    setattr(existing_question, key, value)
+
+                try:
+                    db.session.commit()
+                    restored_questions[existing_question.id] = {
+                        'status': 'updated',
+                        'food': existing_question.read()
+                    }
+                except Exception as e:
+                    db.session.rollback()
+                    restored_questions[existing_question.id] = {
+                        'status': 'error',
+                        'message': str(e)
+                    }
+            else:
+                # Create a new question
+                new_question = Trivia(**question_data)
+                db.session.add(new_question)
+                try:
+                    db.session.commit()
+                    restored_questions[new_question.id] = {
+                        'status': 'created',
+                        'food': new_question.read()
+                    }
+                except Exception as e:
+                    db.session.rollback()
+                    restored_questions[new_question.id] = {
+                        'status': 'error',
+                        'message': str(e)
+                    }
+
+        return restored_questions
+
+def initQuestions(): 
+    question_data = [
+        {
+            "food": "Apple",
+            "glycemic_load": 5,
+            "info": "A delicious and low-carb snack",
+            "image": "apple.png",
+        },
+        {
+            "number": 1,
+            "food": "Banana",
+            "glycemic_load": 10.1,
+            "info": "Good for increasing blood glucose when needed, but to be eaten with care",
+            "image": "banana.png",
+        },
+    ]       
+    
+  
+    for question in question_data:
+        if not Trivia.query.filter_by(question=question["question"]).first():  # check if question already exists aviods duplicates
+            new_question = Trivia(
+                number=question["question"],
+                correct_option=question["correct_option"],
+            )
+            db.session.add(new_question) 
+    
+    # commit transaction to the database
+    try:
+        db.session.commit() 
+    except IntegrityError:
+        db.session.rollback()  
+        print("IntegrityError: Could be a duplicate entry or violation of database constraints.")
+    except Exception as e:
+        db.session.rollback()  
+        print(f"Error: {e}")
+
+with app.app_context():
+    db.create_all() 
+    initQuestions()

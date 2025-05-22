@@ -102,7 +102,7 @@ class Food(db.Model):
                         'message': str(e)
                     }
             else:
-                # Create a new book
+                # Create a new food
                 new_food = Food(**food_data)
                 db.session.add(new_food)
                 try:

@@ -112,11 +112,11 @@ def initQuestions():
         },
         {
             "question": "What does insulin do?",
-            "correct_answer": "c"
+            "correct_answer": "b"
         },
         {
             "question": "How does healthy eating help with diabetes?",
-            "correct_answer": "a"
+            "correct_answer": "c"
         },
         {
             "question": "What does exercise do for blood sugar?",

@@ -36,6 +36,7 @@ from api.foodchoice import food_api
 from api.foodlog import foodlog_api
 from api.flashcards import flashcards_api
 from api.glucose import glucose_api
+from api.matching import matching_api
 # database Initialization functions
 from model.user import User, initUsers
 from model.section import Section, initSections
@@ -62,6 +63,7 @@ app.register_blueprint(group_api)
 app.register_blueprint(section_api)
 app.register_blueprint(crossword_api)
 app.register_blueprint(glucose_api)
+app.register_blueprint(matching_api) 
 # Added new files to create nestPosts, uses a different format than Mortensen and didn't want to touch his junk
 app.register_blueprint(nestPost_api)
 app.register_blueprint(nestImg_api)

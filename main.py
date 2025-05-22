@@ -32,6 +32,7 @@ from api.diabetes import diabetes_api
 from api.crossword import crossword_api
 from api.prediction import prediction_api 
 from api.scores import score_api
+from api.foodchoice import food_api
 from api.foodlog import foodlog_api
 from api.flashcards import flashcards_api
 from api.glucose import glucose_api
@@ -47,6 +48,7 @@ from model.titanic import TitanicModel, initTitanic
 from model.diabetes import DiabetesModel, initDiabetesModel
 from model.prediction import DiabetesPrediction, initPredictions
 from model.scores import init_scores
+from model.foodchoice import Food, initFoods
 from model.foodlog import FoodLog, initFoodLogs
 from model.flashcards import Flashcard, initFlashcards
 from model.glucose import GlucoseRecord, initGlucose
@@ -68,6 +70,7 @@ app.register_blueprint(titanic_api)
 app.register_blueprint(diabetes_api)
 app.register_blueprint(prediction_api)
 app.register_blueprint(score_api)
+app.register_blueprint(food_api)
 app.register_blueprint(foodlog_api)
 app.register_blueprint(flashcards_api)
 
@@ -169,6 +172,7 @@ def generate_data():
     initDiabetesModel()
     initPredictions()
     init_scores()
+    initFoods()
     initFoodLogs()
     initFlashcards()
     initGlucose()
@@ -192,7 +196,8 @@ def extract_data():
         data['groups'] = [group.read() for group in Group.query.all()]
         data['channels'] = [channel.read() for channel in Channel.query.all()]
         data['posts'] = [post.read() for post in Post.query.all()]
-        data['food'] = [food.read() for food in FoodLog.query.all()]
+        data['food'] = [food.read() for food in Food.query.all()]
+        data['foodlog'] = [food.read() for food in FoodLog.query.all()]
         data['glucose'] = [glucose.read() for glucose in GlucoseRecord.query.all()]
     return data
 # Save extracted data to JSON files

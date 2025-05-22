@@ -37,6 +37,8 @@ from api.foodlog import foodlog_api
 from api.flashcards import flashcards_api
 from api.glucose import glucose_api
 from api.matching import matching_api
+from api.trivia import trivia_api
+
 # database Initialization functions
 from model.user import User, initUsers
 from model.section import Section, initSections
@@ -53,6 +55,9 @@ from model.foodchoice import Food, initFoods
 from model.foodlog import FoodLog, initFoodLogs
 from model.flashcards import Flashcard, initFlashcards
 from model.glucose import GlucoseRecord, initGlucose
+from model.trivia import Trivia, initQuestions
+from model.answers import Answers, initAnswers
+
 # register URIs for api endpoints
 app.register_blueprint(messages_api) # Adi added this, messages for his website
 app.register_blueprint(user_api)
@@ -64,7 +69,6 @@ app.register_blueprint(section_api)
 app.register_blueprint(crossword_api)
 app.register_blueprint(glucose_api)
 app.register_blueprint(matching_api) 
-# Added new files to create nestPosts, uses a different format than Mortensen and didn't want to touch his junk
 app.register_blueprint(nestPost_api)
 app.register_blueprint(nestImg_api)
 app.register_blueprint(vote_api)
@@ -75,6 +79,7 @@ app.register_blueprint(score_api)
 app.register_blueprint(food_api)
 app.register_blueprint(foodlog_api)
 app.register_blueprint(flashcards_api)
+app.register_blueprint(trivia_api)
 
 # Tell Flask-Login the view function name of your login route
 login_manager.login_view = "login"
@@ -178,6 +183,8 @@ def generate_data():
     initFoodLogs()
     initFlashcards()
     initGlucose()
+    initQuestions()
+    initAnswers()
 
 # Backup the old database
 def backup_database(db_uri, backup_uri):
@@ -201,6 +208,8 @@ def extract_data():
         data['food'] = [food.read() for food in Food.query.all()]
         data['foodlog'] = [food.read() for food in FoodLog.query.all()]
         data['glucose'] = [glucose.read() for glucose in GlucoseRecord.query.all()]
+        data['questions'] = [question.read() for question in Trivia.query.all()]
+        data['answers'] = [answer.read() for answer in Answers.query.all()]
     return data
 # Save extracted data to JSON files
 def save_data_to_json(data, directory='backup'):

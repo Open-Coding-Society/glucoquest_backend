@@ -113,15 +113,341 @@ def initAnswers():
     answer_data = [
         {
             "answer_id": "a",
-            "answer": "Sample text here",
-            "trivia_id": 1,
+            "answer": "A type of exercise",
+            "trivia_id": 1
         },
         {
             "answer_id": "b",
-            "answer": "Sample text here2",
-            "trivia_id": 1,
+            "answer": "A condition where the body can't properly use sugar from food",
+            "trivia_id": 1
         },
-    ]       
+        {
+            "answer_id": "c",
+            "answer": "A type of vitamin",
+            "trivia_id": 1
+        },
+        {
+            "answer_id": "d",
+            "answer": "A type of diet",
+            "trivia_id": 1
+        },
+
+        {
+            "answer_id": "a",
+            "answer": "Makes your bones stronger",
+            "trivia_id": 2
+        },
+        {
+            "answer_id": "b",
+            "answer": "Helps sugar get into cells for energy",
+            "trivia_id": 2
+        },
+        {
+            "answer_id": "c",
+            "answer": "Helps you sleep better",
+            "trivia_id": 2
+        },
+        {
+            "answer_id": "d",
+            "answer": "Breaks down fat in your body",
+            "trivia_id": 2
+        },
+
+        {
+            "answer_id": "a",
+            "answer": "It makes you gain weight",
+            "trivia_id": 3
+        },
+        {
+            "answer_id": "b",
+            "answer": "It reduces the need to exercise",
+            "trivia_id": 3
+        },
+        {
+            "answer_id": "c",
+            "answer": "It helps manage diabetes by choosing good foods",
+            "trivia_id": 3
+        },
+        {
+            "answer_id": "d",
+            "answer": "It increases blood sugar",
+            "trivia_id": 3
+        },
+
+        {
+            "answer_id": "a",
+            "answer": "It makes you eat more sugar",
+            "trivia_id": 4
+        },
+        {
+            "answer_id": "b",
+            "answer": "It helps your body use sugar better",
+            "trivia_id": 4
+        },
+        {
+            "answer_id": "c",
+            "answer": "It increases sugar levels",
+            "trivia_id": 4
+        },
+        {
+            "answer_id": "d",
+            "answer": "It stops insulin from working",
+            "trivia_id": 4
+        },
+
+        {
+            "answer_id": "a",
+            "answer": "Sugar in your food",
+            "trivia_id": 5
+        },
+        {
+            "answer_id": "b",
+            "answer": "The amount of sugar in your blood",
+            "trivia_id": 5
+        },
+        {
+            "answer_id": "c",
+            "answer": "Sugar in your muscles",
+            "trivia_id": 5
+        },
+        {
+            "answer_id": "d",
+            "answer": "A sugar pill",
+            "trivia_id": 5
+        },
+
+        {
+            "answer_id": "a",
+            "answer": "To get new glasses",
+            "trivia_id": 6
+        },
+        {
+            "answer_id": "b",
+            "answer": "To stay home from work",
+            "trivia_id": 6
+        },
+        {
+            "answer_id": "c",
+            "answer": "To manage diabetes and stay healthy",
+            "trivia_id": 6
+        },
+        {
+            "answer_id": "d",
+            "answer": "To avoid taking medicine",
+            "trivia_id": 6
+        },
+
+        {
+            "answer_id": "a",
+            "answer": "Feeling very tired or thirsty",
+            "trivia_id": 7
+        },
+        {
+            "answer_id": "b",
+            "answer": "Having a fever",
+            "trivia_id": 7
+        },
+        {
+            "answer_id": "c",
+            "answer": "Hearing loss",
+            "trivia_id": 7
+        },
+        {
+            "answer_id": "d",
+            "answer": "Itchy skin",
+            "trivia_id": 7
+        },
+
+        {
+            "answer_id": "a",
+            "answer": "Skipping meals",
+            "trivia_id": 8
+        },
+        {
+            "answer_id": "b",
+            "answer": "Taking naps",
+            "trivia_id": 8
+        },
+        {
+            "answer_id": "c",
+            "answer": "Eating well, moving more, and taking medicine if needed",
+            "trivia_id": 8
+        },
+        {
+            "answer_id": "d",
+            "answer": "Staying up late",
+            "trivia_id": 8
+        },
+
+        {
+            "answer_id": "a",
+            "answer": "A type of fat",
+            "trivia_id": 9
+        },
+        {
+            "answer_id": "b",
+            "answer": "A type of sugar your body uses for energy",
+            "trivia_id": 9
+        },
+        {
+            "answer_id": "c",
+            "answer": "A kind of medicine",
+            "trivia_id": 9
+        },
+        {
+            "answer_id": "d",
+            "answer": "A vitamin",
+            "trivia_id": 9
+        },
+
+        {
+            "answer_id": "a",
+            "answer": "How much a food raises your blood sugar after eating",
+            "trivia_id": 10
+        },
+        {
+            "answer_id": "b",
+            "answer": "How much you should weigh",
+            "trivia_id": 10
+        },
+        {
+            "answer_id": "c",
+            "answer": "How many calories a food has",
+            "trivia_id": 10
+        },
+        {
+            "answer_id": "d",
+            "answer": "How fast you digest food",
+            "trivia_id": 10
+        },
+
+        {
+            "answer_id": "a",
+            "answer": "60 to 90",
+            "trivia_id": 11
+        },
+        {
+            "answer_id": "b",
+            "answer": "80 to 130",
+            "trivia_id": 11
+        },
+        {
+            "answer_id": "c",
+            "answer": "150 to 200",
+            "trivia_id": 11
+        },
+        {
+            "answer_id": "d",
+            "answer": "30 to 70",
+            "trivia_id": 11
+        },
+
+        {
+            "answer_id": "a",
+            "answer": "When your blood sugar is too high or too low",
+            "trivia_id": 12
+        },
+        {
+            "answer_id": "b",
+            "answer": "When your heart rate is high",
+            "trivia_id": 12
+        },
+        {
+            "answer_id": "c",
+            "answer": "When you eat too little",
+            "trivia_id": 12
+        },
+        {
+            "answer_id": "d",
+            "answer": "When your weight increases",
+            "trivia_id": 12
+        },
+
+        {
+            "answer_id": "a",
+            "answer": "Foods that turn into sugar in your body",
+            "trivia_id": 13
+        },
+        {
+            "answer_id": "b",
+            "answer": "Foods that build muscles",
+            "trivia_id": 13
+        },
+        {
+            "answer_id": "c",
+            "answer": "Types of protein",
+            "trivia_id": 13
+        },
+        {
+            "answer_id": "d",
+            "answer": "Types of vitamins",
+            "trivia_id": 13
+        },
+
+        {
+            "answer_id": "a",
+            "answer": "Shaky or dizzy",
+            "trivia_id": 14
+        },
+        {
+            "answer_id": "b",
+            "answer": "Energetic",
+            "trivia_id": 14
+        },
+        {
+            "answer_id": "c",
+            "answer": "Very full",
+            "trivia_id": 14
+        },
+        {
+            "answer_id": "d",
+            "answer": "No appetite",
+            "trivia_id": 14
+        },
+
+        {
+            "answer_id": "a",
+            "answer": "Very thirsty or tired",
+            "trivia_id": 15
+        },
+        {
+            "answer_id": "b",
+            "answer": "Cold and shivering",
+            "trivia_id": 15
+        },
+        {
+            "answer_id": "c",
+            "answer": "Hungry all the time",
+            "trivia_id": 15
+        },
+        {
+            "answer_id": "d",
+            "answer": "Happy and energetic",
+            "trivia_id": 15
+        },
+
+        {
+            "answer_id": "a",
+            "answer": "Checking your heart rate",
+            "trivia_id": 16
+        },
+        {
+            "answer_id": "b",
+            "answer": "Testing your blood sugar",
+            "trivia_id": 16
+        },
+        {
+            "answer_id": "c",
+            "answer": "Measuring temperature",
+            "trivia_id": 16
+        },
+        {
+            "answer_id": "d",
+            "answer": "Taking medicine",
+            "trivia_id": 16
+        }
+    ]
+       
     
   
     for answer in answer_data:

@@ -107,14 +107,71 @@ class Trivia(db.Model):
 def initQuestions(): 
     question_data = [
         {
-            "question": "Apple",
-            "correct_answer": "b",
+            "question": "What is diabetes?",
+            "correct_answer": "b"
         },
         {
-            "question": "Banana",
-            "correct_answer": "a",
+            "question": "What does insulin do?",
+            "correct_answer": "c"
         },
-    ]       
+        {
+            "question": "How does healthy eating help with diabetes?",
+            "correct_answer": "a"
+        },
+        {
+            "question": "What does exercise do for blood sugar?",
+            "correct_answer": "b"
+        },
+        {
+            "question": "What is blood sugar?",
+            "correct_answer": "d"
+        },
+        {
+            "question": "Why are doctor visits important for diabetes?",
+            "correct_answer": "a"
+        },
+        {
+            "question": "What are symptoms of diabetes?",
+            "correct_answer": "c"
+        },
+        {
+            "question": "What does taking care of diabetes involve?",
+            "correct_answer": "d"
+        },
+        {
+            "question": "What is glucose?",
+            "correct_answer": "b"
+        },
+        {
+            "question": "What does glycemic load measure?",
+            "correct_answer": "a"
+        },
+        {
+            "question": "What is the good glucose range before meals?",
+            "correct_answer": "c"
+        },
+        {
+            "question": "What is the bad glucose range?",
+            "correct_answer": "d"
+        },
+        {
+            "question": "What are carbohydrates?",
+            "correct_answer": "a"
+        },
+        {
+            "question": "What might you feel with low blood sugar?",
+            "correct_answer": "b"
+        },
+        {
+            "question": "What might you feel with high blood sugar?",
+            "correct_answer": "c"
+        },
+        {
+            "question": "What is the finger prick test for?",
+            "correct_answer": "b"
+        }
+    ]
+    
     
   
     for question in question_data:

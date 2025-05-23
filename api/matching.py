@@ -36,6 +36,5 @@ def add_leaderboard_entry():
     db.session.commit()
     return jsonify(entry.to_dict()), 201
 
-# Create the table if it doesn't exist
 def init_matching_leaderboard():
     db.create_all()

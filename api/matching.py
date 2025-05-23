@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from datetime import datetime
 from __init__ import db
+from sqlalchemy.exc import IntegrityError
 
 # Model for leaderboard entries
 class MatchingLeaderboard(db.Model):
@@ -37,4 +38,15 @@ def add_leaderboard_entry():
     return jsonify(entry.to_dict()), 201
 
 def init_matching_leaderboard():
-    db.create_all()
+    with db.app.app_context():
+        # Create static entries
+        best = MatchingLeaderboard(name="collin's best", time=3, date="2024-01-01")
+        worst = MatchingLeaderboard(name="collin's worst", time=999, date="2024-01-02")
+        entries = [best, worst]
+
+        for entry in entries:
+            try:
+                db.session.add(entry)
+                db.session.commit()
+            except IntegrityError:
+                db.session.rollback()  # In case of duplicate or error, rollback the session

@@ -208,6 +208,7 @@ def extract_data():
         data['food'] = [food.read() for food in Food.query.all()]
         data['foodlog'] = [food.read() for food in FoodLog.query.all()]
         data['glucose'] = [glucose.read() for glucose in GlucoseRecord.query.all()]
+        data['flashcards'] = [flashcard.read() for flashcard in Flashcard.query.all()]
         data['questions'] = [question.read() for question in Trivia.query.all()]
         data['answers'] = [answer.read() for answer in Answers.query.all()]
     return data

@@ -124,35 +124,35 @@ def initQuestions():
         },
         {
             "question": "What is blood sugar?",
-            "correct_answer": "d"
+            "correct_answer": "b"
         },
         {
             "question": "Why are doctor visits important for diabetes?",
-            "correct_answer": "a"
-        },
-        {
-            "question": "What are symptoms of diabetes?",
             "correct_answer": "c"
         },
         {
+            "question": "What are symptoms of diabetes?",
+            "correct_answer": "a"
+        },
+        {
             "question": "What does taking care of diabetes involve?",
-            "correct_answer": "d"
+            "correct_answer": "c"
         },
         {
             "question": "What is glucose?",
             "correct_answer": "b"
         },
         {
-            "question": "What does glycemic load measure?",
+            "question": "What does glycemic load tell you?",
             "correct_answer": "a"
         },
         {
             "question": "What is the good glucose range before meals?",
-            "correct_answer": "c"
+            "correct_answer": "b"
         },
         {
             "question": "What is the bad glucose range?",
-            "correct_answer": "d"
+            "correct_answer": "a"
         },
         {
             "question": "What are carbohydrates?",
@@ -160,11 +160,11 @@ def initQuestions():
         },
         {
             "question": "What might you feel with low blood sugar?",
-            "correct_answer": "b"
+            "correct_answer": "a"
         },
         {
             "question": "What might you feel with high blood sugar?",
-            "correct_answer": "c"
+            "correct_answer": "a"
         },
         {
             "question": "What is the finger prick test for?",

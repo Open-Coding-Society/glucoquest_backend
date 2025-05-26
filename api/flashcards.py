@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request, current_app
 from flask_restful import Api
 from model.flashcards import db, Flashcard
+import difflib 
 
 # Blueprint for the flashcards API
 flashcards_api = Blueprint('flashcards_api', __name__, url_prefix='/api')
@@ -32,3 +33,39 @@ def delete_flashcard(id):
     db.session.delete(card)
     db.session.commit()
     return jsonify({"message": "Deleted successfully."})
+
+@flashcards_api.route('/flashcards/grade', methods=['POST'])
+def grade_flashcards():
+    """
+    Expects JSON:
+    {
+        "answers": [
+            {"user_answer": "prick test", "correct_term": "Finger Prick Test"},
+            ...
+        ]
+    }
+    Returns JSON:
+    {
+        "results": [
+            {"user_answer": "...", "correct_term": "...", "is_correct": true/false, "similarity": 0.85},
+            ...
+        ]
+    }
+    """
+    data = request.get_json()
+    answers = data.get("answers", [])
+    results = []
+    for ans in answers:
+        user = ans.get("user_answer", "").strip().lower()
+        correct = ans.get("correct_term", "").strip().lower()
+        # Use difflib to get similarity ratio
+        similarity = difflib.SequenceMatcher(None, user, correct).ratio()
+        # Accept if similarity is 0.7 or higher, or if user answer is a substring of correct answer
+        is_correct = similarity >= 0.7 or user in correct or correct in user
+        results.append({
+            "user_answer": ans.get("user_answer", ""),
+            "correct_term": ans.get("correct_term", ""),
+            "is_correct": is_correct,
+            "similarity": similarity
+        })
+    return jsonify({"results": results})

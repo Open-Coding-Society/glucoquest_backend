@@ -1,8 +1,7 @@
-from sqlalchemy import Column, Integer, String, Text
-from sqlalchemy.exc import IntegrityError
+import csv
+import os
 from __init__ import db
 
-# SQLAlchemy model for the flashcards table
 class Flashcard(db.Model):
     __tablename__ = 'flashcards'  # Explicitly name the table
     id = db.Column(db.Integer, primary_key=True)  # Unique ID for each flashcard
@@ -17,6 +16,20 @@ class Flashcard(db.Model):
             "definition": self.definition
         }
 
+def initFlashcards(csv_path='instance/volumes/flashcards.csv'):
+    print("Flashcards loaded!")
+    db.create_all()
+    # Read flashcards from CSV and add them if not already present
+    if os.path.exists(csv_path):
+        with open(csv_path, newline='', encoding='utf-8') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                # Check if the term already exists to avoid duplicates
+                if not Flashcard.query.filter_by(term=row['term']).first():
+                    card = Flashcard(term=row['term'], definition=row['definition'])
+                    db.session.add(card)
+            db.session.commit()
+'''
 def initFlashcards():
     # Ensure the flashcards table exists in the database
     db.create_all()
@@ -43,3 +56,4 @@ def initFlashcards():
         # Bulk insert all sample flashcards into the database
         db.session.bulk_save_objects(sample_cards)
         db.session.commit()
+'''

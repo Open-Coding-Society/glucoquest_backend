@@ -58,10 +58,15 @@ def grade_flashcards():
     for ans in answers:
         user = ans.get("user_answer", "").strip().lower()
         correct = ans.get("correct_term", "").strip().lower()
-        # Use difflib to get similarity ratio
-        similarity = difflib.SequenceMatcher(None, user, correct).ratio()
-        # Accept if similarity is 0.7 or higher, or if user answer is a substring of correct answer
-        is_correct = similarity >= 0.7 or user in correct or correct in user
+        # Blank answers are always incorrect
+        if not user:
+            is_correct = False
+            similarity = 0.0
+        else:
+            similarity = difflib.SequenceMatcher(None, user, correct).ratio()
+            # Accept if similarity is 0.8 or higher, or user answer is a significant substring (at least 4 chars and >= 0.8 similarity)
+            is_significant_substring = len(user) >= 4 and user in correct and similarity >= 0.8
+            is_correct = similarity >= 0.8 or is_significant_substring
         results.append({
             "user_answer": ans.get("user_answer", ""),
             "correct_term": ans.get("correct_term", ""),

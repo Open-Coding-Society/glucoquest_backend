@@ -54,9 +54,9 @@ from model.scores import init_scores
 from model.foodchoice import Food, initFoods
 from model.foodlog import FoodLog, initFoodLogs
 from model.flashcards import Flashcard, initFlashcards
-from model.glucose import GlucoseRecord, initGlucose
 from model.trivia import Trivia, initQuestions
 from model.answers import Answers, initAnswers
+from model.glucose import GlucoseRecord, init_glucose
 
 # register URIs for api endpoints
 app.register_blueprint(messages_api) # Adi added this, messages for his website
@@ -182,7 +182,7 @@ def generate_data():
     initFoods()
     initFoodLogs()
     initFlashcards()
-    initGlucose()
+    init_glucose()
     initQuestions()
     initAnswers()
 

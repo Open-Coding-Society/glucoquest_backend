@@ -1,143 +1,123 @@
 from flask import Blueprint, request, jsonify, g
 from flask_restful import Api, Resource
-from flask_cors import CORS
 from datetime import datetime
-from model.glucose import db, GlucoseRecord
+from __init__ import app
 from api.jwt_authorize import token_required
+from model.glucose import GlucoseRecord
 
-# Define Blueprint and Api
+# Create a Blueprint for the glucose API
 glucose_api = Blueprint('glucose_api', __name__, url_prefix='/api')
-CORS(glucose_api)
 api = Api(glucose_api)
 
-class GlucoseCRUD(Resource):
-    @token_required()
-    def get(self):
-        """Get all glucose records (newest first)"""
-        records = GlucoseRecord.query.order_by(GlucoseRecord.time.desc()).all()
-        return jsonify([{
-            'id': r.id,
-            'value': r.value,
-            'time': r.time.isoformat(),
-            'notes': r.notes,
-            'status': r.status,
-            'created_at': r.created_at.isoformat() if r.created_at else None
-        } for r in records])
+class GlucoseAPI:
+    class _CRUD(Resource):
+        @token_required()
+        def post(self):
+            data = request.get_json()
+            try:
+                record = GlucoseRecord(
+                    user_id=g.current_user.id,  # or data['user_id'] if different
+                    value=data['value'],
+                    time=data.get('time', datetime.utcnow().isoformat()),
+                    notes=data.get('notes', '')
+                    # Don't include status here
+                )
+                if record.create():
+                    return jsonify(record.read())
+                return {'message': 'Failed to create record'}, 400
+            except Exception as e:
+                return {'message': str(e)}, 400
+        @token_required()
+        def get(self):
+            """Get user's glucose records"""
+            records = GlucoseRecord.query.filter_by(user_id=g.current_user.id)\
+                            .order_by(GlucoseRecord.time.desc()).all()
+            return jsonify([r.read() for r in records])
 
-    @token_required()
-    def post(self):
-        """Create a new glucose record"""
-        data = request.get_json()
-        if not data or 'value' not in data or 'time' not in data:
-            return {'error': 'Missing required fields'}, 400
-        try:
-            value = float(data['value'])
-            if value < 1 or value > 30:
-                return {'error': 'Glucose value must be between 1 and 30 mmol/L'}, 400
-            status = self.get_status(value)
-            record = GlucoseRecord(
-                value=value,
-                time=datetime.fromisoformat(data['time']),
-                notes=data.get('notes', '').strip(),
-                status=status,
-                created_at=datetime.utcnow()
-            )
-            db.session.add(record)
-            db.session.commit()
-            return jsonify({
-                'id': record.id,
-                'value': record.value,
-                'time': record.time.isoformat(),
-                'notes': record.notes,
-                'status': record.status,
-                'created_at': record.created_at.isoformat() if record.created_at else None
-            }), 201
-        except Exception as e:
-            db.session.rollback()
-            return {'error': str(e)}, 500
+        @token_required()
+        def put(self):
+            """Update an existing glucose record."""
+            data = request.get_json()
+            if not data or 'record_id' not in data:
+                return {"message": "Record ID required"}, 400
 
-    @token_required()
-    def put(self):
-        """Update a glucose record by id"""
-        data = request.get_json()
-        if not data or 'id' not in data:
-            return {'error': 'Missing record id'}, 400
-        record = GlucoseRecord.query.get(data['id'])
-        if not record:
-            return {'error': 'Record not found'}, 404
-        try:
-            if 'value' in data:
-                value = float(data['value'])
-                if value < 1 or value > 30:
-                    return {'error': 'Glucose value must be between 1 and 30 mmol/L'}, 400
-                record.value = value
-                record.status = self.get_status(value)
-            if 'time' in data:
-                record.time = datetime.fromisoformat(data['time'])
-            if 'notes' in data:
-                record.notes = data['notes'].strip()
-            db.session.commit()
-            return jsonify({
-                'id': record.id,
-                'value': record.value,
-                'time': record.time.isoformat(),
-                'notes': record.notes,
-                'status': record.status,
-                'created_at': record.created_at.isoformat() if record.created_at else None
-            })
-        except Exception as e:
-            db.session.rollback()
-            return {'error': str(e)}, 500
+            record = GlucoseRecord.query.get(data['record_id'])
+            if not record:
+                return {"message": "Record not found"}, 404
 
-    @token_required()
-    def delete(self):
-        """Delete a glucose record by id"""
-        data = request.get_json()
-        if not data or 'id' not in data:
-            return {'error': 'Missing record id'}, 400
-        record = GlucoseRecord.query.get(data['id'])
-        if not record:
-            return {'error': 'Record not found'}, 404
-        try:
-            db.session.delete(record)
-            db.session.commit()
-            return {'message': 'Record deleted'}
-        except Exception as e:
-            db.session.rollback()
-            return {'error': str(e)}, 500
+            try:
+                if 'value' in data:
+                    value = float(data['value'])
+                    if value < 1 or value > 30:
+                        return {'message': 'Glucose value must be between 1 and 30 mmol/L'}, 400
+                    record.value = value
+                    record.status = self._get_status(value)
+                if 'time' in data:
+                    record.time = datetime.fromisoformat(data['time'])
+                if 'notes' in data:
+                    record.notes = data['notes'].strip()
 
-    def options(self):
-        """CORS preflight support"""
-        return {}, 200
+                record.update()
+                return jsonify(record.read())
+            except Exception as e:
+                return {"message": str(e)}, 500
 
-    @staticmethod
-    def get_status(value):
-        if value < 4:
-            return "Low"
-        elif value > 7.8:
-            return "High"
-        return "Normal"
+        @token_required()
+        def delete(self):
+            """Delete a glucose record."""
+            data = request.get_json()
+            if not data or 'record_id' not in data:
+                return {"message": "Record ID required"}, 400
 
-class GlucoseByID(Resource):
-    @token_required()
-    def get(self, record_id):
-        """Get a single glucose record by id"""
-        record = GlucoseRecord.query.get(record_id)
-        if not record:
-            return {'error': 'Record not found'}, 404
-        return jsonify({
-            'id': record.id,
-            'value': record.value,
-            'time': record.time.isoformat(),
-            'notes': record.notes,
-            'status': record.status,
-            'created_at': record.created_at.isoformat() if record.created_at else None
-        })
+            record = GlucoseRecord.query.get(data['record_id'])
+            if not record:
+                return {"message": "Record not found"}, 404
 
-    def options(self, record_id=None):
-        """CORS preflight support"""
-        return {}, 200
+            try:
+                record.delete()
+                return {"message": "Record deleted successfully"}
+            except Exception as e:
+                return {"message": str(e)}, 500
 
-# 注册资源
-api.add_resource(GlucoseCRUD, '/glucose')
-api.add_resource(GlucoseByID, '/glucose/<int:record_id>')
+        @staticmethod
+        def _get_status(value):
+            if value < 4:
+                return "Low"
+            elif value > 7.8:
+                return "High"
+            return "Normal"
+
+    class _ALL(Resource):
+        @token_required()
+        def get(self):
+            """Retrieve all glucose records (newest first)."""
+            records = GlucoseRecord.query.order_by(GlucoseRecord.time.desc()).all()
+            return jsonify([record.read() for record in records])
+
+    class _BY_USER(Resource):
+        @token_required()
+        def get(self, user_id):
+            """Retrieve glucose records by user ID."""
+            records = GlucoseRecord.query.filter_by(user_id=user_id).order_by(GlucoseRecord.time.desc()).all()
+            if not records:
+                return {"message": "No records found for this user."}, 404
+            return jsonify([record.read() for record in records])
+
+    class _RECENT(Resource):
+        @token_required()
+        def get(self):
+            """Retrieve recent glucose records."""
+            try:
+                limit = int(request.args.get('limit', 10))
+                limit = min(limit, 100)  # cap at 100
+            except ValueError:
+                return {"message": "Invalid limit value"}, 400
+
+            records = GlucoseRecord.query.order_by(GlucoseRecord.time.desc()).limit(limit).all()
+            return jsonify([record.read() for record in records])
+
+# Register API endpoints
+api.add_resource(GlucoseAPI._CRUD, '/glucose')
+api.add_resource(GlucoseAPI._ALL, '/glucose/all')
+api.add_resource(GlucoseAPI._BY_USER, '/glucose/user/<int:user_id>')
+api.add_resource(GlucoseAPI._RECENT, '/glucose/recent')

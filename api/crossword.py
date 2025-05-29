@@ -27,7 +27,6 @@ with app.app_context():
 
 
 # API Endpoints
-# filepath: /home/qixiang/nighthawk/dexcom_backend/api/crossword.py
 crossword_api = Blueprint('crossword_api', __name__)
 
 @crossword_api.route('/api/feedback', methods=['POST'])

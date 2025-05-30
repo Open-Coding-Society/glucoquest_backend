@@ -38,6 +38,7 @@ from api.flashcards import flashcards_api
 from api.glucose import glucose_api
 from api.matching import matching_api
 from api.trivia import trivia_api
+from api.racing import racing_api
 
 # database Initialization functions
 from model.user import User, initUsers
@@ -80,6 +81,7 @@ app.register_blueprint(food_api)
 app.register_blueprint(foodlog_api)
 app.register_blueprint(flashcards_api)
 app.register_blueprint(trivia_api)
+app.register_blueprint(racing_api)
 
 # Tell Flask-Login the view function name of your login route
 login_manager.login_view = "login"

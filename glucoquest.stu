@@ -1,7 +1,7 @@
 server {
         listen 80;
         listen [::]:80;
-        server_name glucoquest.stu.nighthawkcodingsociety.com;
+        server_name glucoquest.stu.opencodingsociety.com;
 
         location / {
             proxy_pass http://localhost:8520;

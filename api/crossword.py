@@ -45,6 +45,3 @@ def get_feedback():
     feedbacks = Feedback.query.order_by(Feedback.timestamp.desc()).all()
     return jsonify([f.to_dict() for f in feedbacks])
 
-@crossword_api.route('/')
-def index():
-    return render_template('crossword.html')

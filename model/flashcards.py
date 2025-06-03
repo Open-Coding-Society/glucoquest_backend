@@ -16,7 +16,7 @@ class Flashcard(db.Model):
             "definition": self.definition
         }
 
-def initFlashcards(csv_path='instance/volumes/flashcards.csv'):
+def initFlashcards(csv_path='flashcards.csv'):
     print("Flashcards loaded!")
     db.create_all()
     # Read flashcards from CSV and add them if not already present

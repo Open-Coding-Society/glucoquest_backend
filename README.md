@@ -42,7 +42,7 @@ The **GlucoQuest Backend** powers the interactive features of the frontend by fe
 ```bash
 mkdir -p ~/nighthawk; cd ~/nighthawk
 
-git clone https://github.com/nighthawkcoders/glucoquest_backend.git
+git clone https://github.com/vibha1019/glucoquest_backend.git
 
 cd glucoquest_backend
 ```

@@ -1,6 +1,6 @@
 # GlucoQuest Backend
 
-The **GlucoQuest Backend** powers the interactive features of the frontend by delivering data, managing APIs, and supporting AI-based tools. Developed by students in partnership with **Dexcom** and **PilotCity**, it provides real-world backend experience using modern frameworks and deployment tools.
+The **GlucoQuest Backend** powers the interactive features of the frontend by fetching data, managing APIs, and supporting ML tools. Developed in partnership with **Dexcom** through **PilotCity**, it provides real-world backend experience using modern frameworks and deployment tools.
 
 ## Project Goals
 
@@ -12,35 +12,91 @@ The **GlucoQuest Backend** powers the interactive features of the frontend by de
 ## Features
 
 ### RESTful APIs
-- Serve quizzes, flashcards, and game data
+- Serve quizzes, flashcards, and game and leaderboard data
 - Handle user inputs and track progress
 - Manage content delivery for games
 
 ### AI Quiz Feedback
-- Evaluate answers using OpenAI API
+- Evaluate answers using AI
 - Provide instant responses to users
 
 ### Session Handling
 - Track user progress and interactions
 - Lightweight and stateless sessions
 
-### Admin Tools
-- Upload new content
-- Reset or manage game data
-
 ## Technical Stack
 
-- **Language:** Python (Flask) or Node.js (Express)
-- **Hosting:** Local / Heroku / Render / Fly.io
-- **AI Integration:** OpenAI API
-- **Database:** (Optional) SQLite or MongoDB
+- **Language:** Python (Flask)
+- **Hosting:** Local / AWS
+- **Database:** SQLite3
 - **CI/CD:** GitHub Actions
 
 ## Setup
 
-### Flask (Python)
+### Getting Started
+
+> Quick steps that can be used with MacOS, WSL Ubuntu, or Ubuntu; this uses Python 3.9 or later as a prerequisite.
+
+- Open a Terminal, clone a project and `cd` into the project directory.  Use a `different link` and name for `name` for clone to match your repo.
+
+```bash
+mkdir -p ~/nighthawk; cd ~/nighthawk
+
+git clone https://github.com/nighthawkcoders/glucoquest_backend.git
+
+cd glucoquest_backend
+```
+
+- Install python dependencies for Flask, etc.
 
 ```bash
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+```
+
+### Open project in VSCode
+
+- Prepare VSCode and run
+  - From Terminal run VSCode
+
+  ```bash
+  code .
+  ```
+
+  - Open Setting: Ctrl-Shift P or Cmd-Shift
+    - Search Python: Select Interpreter.
+    - Match interpreter to `which python` from terminal.
+    - Shourd be ./venv/bin/python
+
+  - From Extensions Marketplace install `SQLite3 Editor`
+    - Open and view SQL database file `instance/volumes/user_management.db`
+
+  - Make a local `.env` file in root of project to contain your secret passwords
+
+  ```shell
+  # User Defaults
+  ADMIN_USER='toby'
+  ADMIN_PASSWORD='123Toby!'
+  DEFAULT_USER='hop'
+  DEFAULT_PASSWORD='123Hop!'
+  ```
+
+  - Make the database and init data.
+  
+  ```bash
+  ./scripts/db_init.py
+  ```
+
+  - Explore newly created SQL database
+    - Navigate too instance/volumes
+    - View/open `user_management.db`
+    - Loook at `Users` table in viewer
+
+  - Run the Project
+    - Select/open `main.py` in VSCode
+    - Start with Play button
+      - Play button sub option contains Debug
+    - Click on loop back address in terminal to launch
+      - Output window will contain page to launch http://127.0.0.1:8520
+    - Login using password

@@ -41,5 +41,6 @@ The **GlucoQuest Backend** powers the interactive features of the frontend by de
 ### Flask (Python)
 
 ```bash
+python -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
-python app.py

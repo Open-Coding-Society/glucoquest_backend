@@ -113,45 +113,47 @@ def initAnswers():
     answer_data = [
         {
             "answer_id": "a",
-            "answer": "A type of exercise",
-            "trivia_id": 1
-        },
-        {
-            "answer_id": "b",
-            "answer": "A condition where the body can't properly use sugar from food",
-            "trivia_id": 1
-        },
-        {
-            "answer_id": "c",
-            "answer": "A type of vitamin",
-            "trivia_id": 1
-        },
-        {
-            "answer_id": "d",
-            "answer": "A type of diet",
-            "trivia_id": 1
-        },
-
-        {
-            "answer_id": "a",
             "answer": "Makes your bones stronger",
-            "trivia_id": 2
+            "trivia_id": 1
         },
         {
             "answer_id": "b",
             "answer": "Helps sugar get into cells for energy",
-            "trivia_id": 2
+            "trivia_id": 1
         },
         {
             "answer_id": "c",
             "answer": "Helps you sleep better",
-            "trivia_id": 2
+            "trivia_id": 1
         },
         {
             "answer_id": "d",
             "answer": "Breaks down fat in your body",
+            "trivia_id": 1
+        },
+        
+        {
+            "answer_id": "a",
+            "answer": "A type of exercise",
             "trivia_id": 2
         },
+        {
+            "answer_id": "b",
+            "answer": "A condition where the body can't properly use sugar from food",
+            "trivia_id": 2
+        },
+        {
+            "answer_id": "c",
+            "answer": "A type of vitamin",
+            "trivia_id": 2
+        },
+        {
+            "answer_id": "d",
+            "answer": "A type of diet",
+            "trivia_id": 2
+        },
+
+        
 
         {
             "answer_id": "a",

@@ -107,11 +107,11 @@ class Trivia(db.Model):
 def initQuestions(): 
     question_data = [
         {
-            "question": "What is diabetes?",
+            "question": "What does insulin do?",
             "correct_answer": "b"
         },
         {
-            "question": "What does insulin do?",
+            "question": "What is diabetes?",
             "correct_answer": "b"
         },
         {

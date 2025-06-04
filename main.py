@@ -39,7 +39,7 @@ from api.glucose import glucose_api
 from api.matching import matching_api
 from api.trivia import trivia_api
 from api.racing import racing_api
-
+from api.survey import survey_api  # Assuming you have a survey_api defined
 # database Initialization functions
 from model.user import User, initUsers
 from model.section import Section, initSections
@@ -58,7 +58,7 @@ from model.flashcards import Flashcard, initFlashcards
 from model.trivia import Trivia, initQuestions
 from model.answers import Answers, initAnswers
 from model.glucose import GlucoseRecord, init_glucose
-
+from model.survey import Survey, init_surveys
 # register URIs for api endpoints
 app.register_blueprint(messages_api) # Adi added this, messages for his website
 app.register_blueprint(user_api)
@@ -82,6 +82,7 @@ app.register_blueprint(foodlog_api)
 app.register_blueprint(flashcards_api)
 app.register_blueprint(trivia_api)
 app.register_blueprint(racing_api)
+app.register_blueprint(survey_api)  # Assuming you have a survey_api defined
 
 # Tell Flask-Login the view function name of your login route
 login_manager.login_view = "login"
@@ -187,6 +188,7 @@ def generate_data():
     init_glucose()
     initQuestions()
     initAnswers()
+    init_surveys()
 
 # Backup the old database
 def backup_database(db_uri, backup_uri):

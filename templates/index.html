@@ -68,6 +68,13 @@
         .highlight-text {
             color: var(--highlight-color);
         }
+        .card-link:hover {
+            transform: scale(1.02);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+
     </style>
 {% endblock %}
 
@@ -78,18 +85,18 @@
     </h1>
 
     <div class="d-flex justify-content-center align-items-start flex-wrap gap-4">
-        <!-- User Management Card (No Link) -->
+        <!-- GlucoQuest Business Card -->
         <div class="card text-center shadow-sm" style="width: 28rem; border: none;">
-            <img class="card-img-top" src="{{ url_for('static', filename='assets/glucoquest_businesscard.png') }}" alt="User Management" style="height: 400px; object-fit: cover; border-radius: 0.5rem;">
+            <img class="card-img-top" src="{{ url_for('static', filename='assets/glucoquest_businesscard.png') }}" alt="GlucoQuest Business Card" style="height: 400px; object-fit: cover; border-radius: 0.5rem;">
         </div>
 
-        <!-- Meet the Team Card -->
-        <div class="card text-center shadow-sm" style="width: 24rem; border: none;">
-            <img class="card-img-top" src="{{ url_for('static', filename='assets/dexcom_favicon.ico') }}" alt="Meet the Team" style="height: 300px; object-fit: cover; border-radius: 0.5rem;">
-            <div class="card-body">
-                <a href="{{ url_for('team') }}" class="btn btn-secondary w-100">Meet the Team</a>
+        <!-- Meet the Team Image Link Card -->
+        <a href="{{ url_for('team') }}" class="card-link" style="text-decoration: none;">
+            <div class="card shadow-sm" style="width: 28rem; border: none;">
+                <img class="card-img-top" src="{{ url_for('static', filename='assets/meet_the_team.png') }}" alt="Meet the Team" style="height: 400px; object-fit: cover; border-radius: 0.5rem;">
             </div>
-        </div>
+        </a>
+
     </div>
 </div>
 {% endblock %}

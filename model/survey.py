@@ -7,24 +7,27 @@ app = Flask(__name__)
 
 # Survey Model (Already defined, for reference)
 class Survey(db.Model):
-    __tablename__ = 'surveys'  # Plural table name for consistency
+    __tablename__ = 'surveys'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     message = db.Column(db.String(255), nullable=False)
+    name = db.Column(db.String(100), nullable=True)  # New name field
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
-    def __init__(self, message, user_id):
+    def __init__(self, message, user_id, name=None):  # Updated constructor
         self.message = message
         self.user_id = user_id
+        self.name = name
 
     def __repr__(self):
-        return f"Survey(id={self.id}, message={self.message}, user_id={self.user_id})"
+        return f"Survey(id={self.id}, message={self.message}, name={self.name}, user_id={self.user_id})"
 
     def create(self):
         """Adds a new survey response to the database."""
         try:
             db.session.add(self)
             db.session.commit()
+            return self
         except IntegrityError:
             db.session.rollback()
             raise IntegrityError("Survey response creation failed due to a database error.")
@@ -34,6 +37,7 @@ class Survey(db.Model):
         return {
             'id': self.id,
             'message': self.message,
+            'name': self.name,  # Include name in the response
             'user_id': self.user_id
         }
 

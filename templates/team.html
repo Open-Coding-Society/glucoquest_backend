@@ -2,55 +2,34 @@
 
 {% block body %}
 <div class="container mx-auto py-5">
-    <h2 class="text-center mb-4" style="color: var(--secondary-color);">Meet the GlucoQuest Team</h2>
-    <div class="row justify-content-center gap-4">
-        <!-- Maryam -->
-        <div class="card shadow-sm" style="width: 18rem;">
-            <div class="card-body text-center">
-                <h5 class="card-title">Maryam A.</h5>
-                <a href="https://www.linkedin.com/in/maryam-abdul-aziz/" target="_blank" class="btn btn-outline-primary btn-sm">LinkedIn</a>
-            </div>
-        </div>
+<h2 class="text-center mb-4" style="color: white !important;">Meet the GlucoQuest Team</h2>
+    <div class="row justify-content-center gap-4 flex-wrap d-flex">
 
-        <!-- Aditi -->
-        <div class="card shadow-sm" style="width: 18rem;">
-            <div class="card-body text-center">
-                <h5 class="card-title">Aditi B.</h5>
-                <a href="https://www.linkedin.com/in/aditi-bandaru-041a94275/" target="_blank" class="btn btn-outline-primary btn-sm">LinkedIn</a>
-            </div>
-        </div>
+        <!-- Team Member Template -->
+        {% set team = [
+            {"name": "Maryam A.", "id": "maryam", "link": "https://www.linkedin.com/in/maryam-abdul-aziz/"},
+            {"name": "Aditi B.", "id": "aditi", "link": "https://www.linkedin.com/in/aditi-bandaru-041a94275/"},
+            {"name": "Vibha M.", "id": "vibha", "link": "https://www.linkedin.com/in/vibha-mandayam-315042315"},
+            {"name": "Anyi W.", "id": "anyi", "link": "https://www.linkedin.com/in/anyi-wang-287275315/?profileId=ACoAAE_zgkcB5bmt8JUeu7Hja2ehqe3_w6A7SvU"},
+            {"name": "Shriya P.", "id": "shriya", "link": "https://www.linkedin.com/in/shriya-paladugu-7a5865311/"},
+            {"name": "Collin G.", "id": "collin", "link": None}
 
-        <!-- Collin -->
-        <div class="card shadow-sm" style="width: 18rem;">
-            <div class="card-body text-center">
-                <h5 class="card-title">Collin G.</h5>
-                <p class="text-muted">LinkedIn not available</p>
-            </div>
-        </div>
+        ] %}
 
-        <!-- Vibha -->
-        <div class="card shadow-sm" style="width: 18rem;">
+        {% for member in team %}
+        <div class="card shadow-sm m-3" style="width: 18rem;">
+            <img src="{{ url_for('static', filename='assets/' ~ member.id ~ '.jpeg') }}" class="card-img-top" alt="{{ member.name }}" style="height: 240px; object-fit: cover; border-radius: 0.5rem 0.5rem 0 0;">
             <div class="card-body text-center">
-                <h5 class="card-title">Vibha M.</h5>
-                <a href="https://www.linkedin.com/in/vibha-mandayam-315042315" target="_blank" class="btn btn-outline-primary btn-sm">LinkedIn</a>
+                <h5 class="card-title">{{ member.name }}</h5>
+                {% if member.link %}
+                    <img src="{{ url_for('static', filename='assets/' ~ member.id ~ '_linkedin.png') }}" alt="QR Code for {{ member.name }}" style="height: 120px;" class="mb-2">
+                    <a href="{{ member.link }}" target="_blank" class="btn btn-outline-primary btn-sm">LinkedIn</a>
+                {% else %}
+                    <p class="text-muted mt-3">LinkedIn not available</p>
+                {% endif %}
             </div>
         </div>
-
-        <!-- Shriya -->
-        <div class="card shadow-sm" style="width: 18rem;">
-            <div class="card-body text-center">
-                <h5 class="card-title">Shriya P.</h5>
-                <a href="https://www.linkedin.com/in/shriya-paladugu-7a5865311/" target="_blank" class="btn btn-outline-primary btn-sm">LinkedIn</a>
-            </div>
-        </div>
-
-        <!-- Anyi -->
-        <div class="card shadow-sm" style="width: 18rem;">
-            <div class="card-body text-center">
-                <h5 class="card-title">Anyi W.</h5>
-                <a href="https://www.linkedin.com/in/anyi-wang-287275315/?profileId=ACoAAE_zgkcB5bmt8JUeu7Hja2ehqe3_w6A7SvU" target="_blank" class="btn btn-outline-primary btn-sm">LinkedIn</a>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

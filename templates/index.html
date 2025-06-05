@@ -74,14 +74,13 @@
 {% block body %}
     <div class="container mx-auto" style="height: 100vh;">
         <h1 class="text-center mb-4" style="color: var(--secondary-color); text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
-            <strong>GlucoQuest Admin Dashboard</strong>
+            <strong>GlucoQuest</strong>
         </h1>
         
         <div class="d-flex justify-content-center align-items-center flex-wrap gap-4" style="height: 70vh;">
-            <!-- User Management Card -->
             <div class="card text-center shadow-sm" style="width: 22rem;">
                 <h5 class="card-title mt-3">User Management</h5>
-                <img class="card-img-top" src="{{ url_for('static', filename='assets/user.png') }}" alt="User Management" height="200">
+                <img class="card-img-top" src="{{ url_for('static', filename='assets/glucoquest_businesscard.png') }}" alt="User Management" height="200">
                 <div class="card-body">
                     <p class="card-text">Manage users, update roles, and remove inactive accounts.</p>
                     <a href="https://holiday.stu.nighthawkcodingsociety.com/users/table" class="btn btn-primary">Manage Users</a>
@@ -100,3 +99,31 @@
         </div>
     </div>
 {% endblock %}
+
+<!-- {% block body %}
+    <div class="container mx-auto" style="height: 100vh;">
+        <h1 class="text-center mb-4" style="color: var(--secondary-color); text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+            <strong>GlucoQuest Admin Dashboard</strong>
+        </h1>
+        
+        <div class="d-flex justify-content-center align-items-center flex-wrap gap-4" style="height: 70vh;">
+            <div class="card text-center shadow-sm" style="width: 22rem;">
+                <h5 class="card-title mt-3">User Management</h5>
+                <img class="card-img-top" src="{{ url_for('static', filename='assets/user.png') }}" alt="User Management" height="200">
+                <div class="card-body">
+                    <p class="card-text">Manage users, update roles, and remove inactive accounts.</p>
+                    <a href="https://holiday.stu.nighthawkcodingsociety.com/users/table" class="btn btn-primary">Manage Users</a>
+                </div>
+            </div>
+
+            <div class="card text-center shadow-sm" style="width: 22rem;">
+                <h5 class="card-title mt-3">Settings</h5>
+                <img class="card-img-top" src="{{ url_for('static', filename='assets/settings.png') }}" alt="Settings" height="200">
+                <div class="card-body">
+                    <p class="card-text">Configure site settings, API keys, and security options.</p>
+                    <a href="{{ url_for('settings') }}" class="btn btn-secondary">Settings</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %} -->

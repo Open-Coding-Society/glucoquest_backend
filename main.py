@@ -132,6 +132,10 @@ def index():
 def settings():
     return render_template('settings.html')
 
+@app.route('/team')
+def team():
+    return render_template('team.html')
+
 @app.route('/users/table')
 @login_required
 def utable():

@@ -80,20 +80,30 @@
 
 {% block body %}
 <div class="container mx-auto">
-    <h1 class="text-center mb-4" style="color: var(--secondary-color); text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+    <h1 class="text-center mb-6" style="color: var(--secondary-color); text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
         <strong>GlucoQuest</strong>
     </h1>
 
-    <div class="d-flex justify-content-center align-items-start flex-wrap gap-4">
-        <!-- GlucoQuest Business Card -->
-        <div class="card text-center shadow-sm" style="width: 28rem; border: none;">
-            <img class="card-img-top" src="{{ url_for('static', filename='assets/glucoquest_businesscard.png') }}" alt="GlucoQuest Business Card" style="height: 400px; object-fit: cover; border-radius: 0.5rem;">
+    <!-- Responsive Flex Wrapper -->
+    <div class="d-flex justify-content-center align-items-start flex-wrap gap-4" style="gap: 2rem;">
+
+        <!-- GlucoQuest Business Card + Button -->
+        <div class="card text-center shadow-sm p-3" style="width: 100%; max-width: 28rem; border: none;">
+            <img class="card-img-top mb-3" src="{{ url_for('static', filename='assets/glucoquest_businesscard.png') }}"
+                 alt="GlucoQuest Business Card"
+                 style="height: 400px; object-fit: cover; border-radius: 0.5rem; width: 100%;">
+            <a href="{{ url_for('static', filename='assets/GlucoQuest.vcf') }}" download
+               class="btn btn-primary w-100 font-semibold rounded-md hover:scale-105 transition-all duration-300">
+               Download E-Card
+            </a>
         </div>
 
-        <!-- Meet the Team Image Link Card -->
-        <a href="{{ url_for('team') }}" class="card-link" style="text-decoration: none;">
-            <div class="card shadow-sm" style="width: 28rem; border: none;">
-                <img class="card-img-top" src="{{ url_for('static', filename='assets/meet_the_team.png') }}" alt="Meet the Team" style="height: 400px; object-fit: cover; border-radius: 0.5rem;">
+        <!-- Meet the Team Card (Matched height and width) -->
+        <a href="{{ url_for('team') }}" class="card-link" style="text-decoration: none; width: 100%; max-width: 28rem;">
+            <div class="card shadow-sm p-3" style="border: none;">
+                <img class="card-img-top" src="{{ url_for('static', filename='assets/meet_the_team.png') }}"
+                     alt="Meet the Team"
+                     style="height: 446px; object-fit: cover; border-radius: 0.5rem; width: 100%;">
             </div>
         </a>
 

@@ -1,0 +1,12 @@
+BEGIN:VCARD
+VERSION:3.0
+FN:GlucoQuest
+ORG:GlucoQuest x Dexcom | Open Coding Society
+TITLE:Diabetes Education Platform
+URL:https://open-coding-society.github.io/glucoquest_frontend/
+NOTE:An interactive web platform created in partnership with Dexcom that teaches diabetes awareness and blood glucose management through games, data visualizations, and user engagement tools.
+item1.URL;type=pref:https://www.youtube.com/watch?v=bAgZ2G2Qnu4
+item1.X-ABLabel:Pitch Video
+item2.URL;type=pref:https://github.com/Open-Coding-Society/glucoquest_frontend
+item2.X-ABLabel:GitHub Repository
+END:VCARD
